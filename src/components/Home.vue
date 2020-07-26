@@ -2,30 +2,36 @@
     div(
       style="width: 100%; height: 100%"
       ref="layout")
-      div(v-for="(child, index) in windows")
-        component(:is="child" :key="child.name")
-        // button(@click="test") Hide window
-        // button(@click="test2") Attach window
-        //exWindow
-        //exWindow(
-        //    :isOpen="isOpen"
-        //    v-if="isOpen"
-        //    @click="isOpen = !isOpen"
-        //    @closeWindow="isOpen = false"
-        //)
-        //DropMeFileForm(
-        //  :initHeight="500",
-        //  :initWidth="400",
-        //  :initX="100",
-        //  :initY="100")
+      div(v-for="icon in icons")
+        Icon(:href-icon="icon.src", :title-icon="icon.title")
+
+      div(v-for="(value, name) in allWindows()")
+        component(:is="name" :initOptions="value")
+
+      // div(v-for="(value, name) in allWindows()")
+      //  div {{ name }} {{ value }}
+
+      Taskbar
+
+      // button(@click="test") Hide window
+      // button(@click="test2") Attach window
+
+      //exWindow(
+      //    :isOpen="isOpen"
+      //    v-if="isOpen"
+      //    @click="isOpen = !isOpen"
+      //    @closeWindow="isOpen = false"
+      //)
 </template>
 
 <script>
     import Vue from 'vue'
-    import exWindow from './Ex/ExWindow'
+    import Help from "@/components/Windows/Help";
     import Taskbar from './Taskbar/Taskbar'
-    import DropMeFileForm from './Ex/ExDropMe'
+    import ExDropMe from './Windows/ExDropMe'
+    import Window from "@/components/Window/Window";
     import Button from "./Buttons/Button";
+    import Icon from "./Icons/Icon"
 
     export default {
       name: 'Home',
@@ -33,59 +39,29 @@
         return {
           isOpen: true,
           openedWindows: [],
-          windows: []
+          windows: [],
+          icons: [
+            {'title': 'Computer', 'src': require("@/assets/desktop_icons/computer.png")},
+            {'title': 'Folder', 'src': require("@/assets/desktop_icons/folder.png")},
+            {'title': 'Net', 'src': require("@/assets/desktop_icons/net.png")}
+          ]
         }
       },
       components: {
-        Button,
-        exWindow, Taskbar, DropMeFileForm
+        Button, Icon, ExDropMe, Help, Taskbar, Window
       },
       methods: {
         showWindow() {
           this.isOpen = true
         },
-        attachComponent(name, component, props = {}) {
-          let componentClass = Vue.extend(component);
-          let componentInstance = new componentClass({propsData: props});
-          componentInstance.$mount();
-          this.$refs.layout.appendChild(componentInstance.$el)
-          this.openedWindows.push(componentInstance)
-        },
-        // attachComponentTest(component) {
-        //   this.windows.push(component);
-        // },
-        // test2() {
-        //   this.attachComponentTest(exWindow);
-        // },
-        // test() {
-        //   console.log(this.windows);
-        //   this.windows.pop()
-        // }
+        allWindows() {
+          console.log('from allWindows')
+          console.log(this.$cookies.get('userConfig'))
+          return this.$store.getters.allWindows;
+        }
       },
       mounted() {
-        let openedWindows = this.$cookies.get('userConfig')['openedWindows'];
-        console.log('Opened Windows:')
-        console.log(openedWindows);
-        for (let windowName in openedWindows) {
-          let name = windowName, props = openedWindows[windowName];
-          if (name === 'exWindow') {
-            this.attachComponent(name, exWindow, props)
-            // this.attachComponentTest(exWindow)
-          }
-          if (name === 'DropMeFileForm') {
-            this.attachComponent(name, DropMeFileForm, props)
-          }
-        }
-        // this.$cookies.set(
-        //     'userConfig',
-        //     {
-        //       'openedWindows': {
-        //         'exWindow': {'initHeight': 500, 'initWidth': 500, 'initX': 10, 'initY': 10},
-        //         // 'DropMeFileForm': {'initHeight': 500, 'initWidth': 500, 'initX': 440, 'initY': 300}
-        //         }
-        //     });
-
-        // console.log(this.$cookies.get('userConfig'));
+        this.$store.dispatch('loadCookieWindows', this);
       }
     }
 </script>

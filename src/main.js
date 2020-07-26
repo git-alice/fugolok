@@ -3,11 +3,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 import router from './router'
 import VuePreview from 'vue-preview'
 import VueTinyLazyloadImg from 'vue-tiny-lazyload-img'
-import VueKonva from 'vue-konva';
 import VueCookies from 'vue-cookies'
+import store from './store'
 
 Vue.use(VueCookies);
-Vue.use(VueKonva);
 
 // with parameters install
 Vue.use(VuePreview, {
@@ -33,6 +32,7 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
+  store,
   router,
+  render: h => h(App),
 }).$mount('#app')
