@@ -1,14 +1,14 @@
 <template lang="pug">
-    button.task_button Окно {{ id }}
+  button.task_button(@contextmenu.prevent="")
+    img(src="@/assets/start.png")
+    b Окно {{ id }}
 </template>
 
 <script>
-    export default {
-        props: [
-            'id'
-        ],
-
-    }
+  export default {
+    name: 'TaskButton',
+    methods: {}
+  }
 </script>
 
 <style>

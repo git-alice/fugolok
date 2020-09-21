@@ -1,40 +1,49 @@
 <template lang="pug">
     div.taskbar
         Start
-        button.task_button(v-for="opened_window in windows" :key="opened_window.id" :id="opened_window.id" v-on:click="close_open") Окно {{ opened_window.id }}
+        div()
+        button.task_button(v-for="(v, k, i) in allWindows()")
+          // img(src="@/assets/desktop_icons/account.png")
+          p Окно {{ k }}
+        button.task_button(@click="closeAllWindows" style="margin-left: auto;") C.A.
 </template>
 
 <script>
     import Start from './Start'
     import TaskButton from './TaskButton'
+
     export default {
-        name: "taskbar",
+        name: "Taskbar",
         data: () => {
-            return {
-                windows: null
-            }
+          return {}
         },
         components: {
-            Start, TaskButton
+          Start, TaskButton
         },
         mounted() {
-            let windows = this.$parent.$children.filter((el) => {
-                if (el.$children) {
-                    return el.$children[0].id
-                }
-            }).map((el) => {
-                return el.$children[0]
-            });
-            this.windows = windows
+          // console.log(this.windows)
+          // this.windows = this.$store.getters.allWindows;
+          // console.log(this.windows)
+          // let windows = this.$parent.$children.filter((el) => {
+          //     if (el.$children) {
+          //         return el.$children[0].id
+          //     }
+          // }).map((el) => {
+          //     return el.$children[0]
+          // });
+          // this.windows = windows
+        },
+        created() {
+          console.log('from Taskbar')
         },
         methods: {
-            close_open(event) {
-                let opened_window = this.windows.filter((el) => {
-                    return (el.id === Number(event.target.id))
-                })[0]
-                opened_window.window_open = !opened_window.window_open
+            allWindows() {
+              return this.$store.getters.allWindows;
+            },
+            closeAllWindows(event) {
+              this.$store.dispatch('deleteAllWindows', this);
             }
-        }
+          }
     }
 </script>
 

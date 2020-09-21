@@ -36,11 +36,12 @@ $re: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAN0lE
   box-sizing: border-box;
   /*user-select: none;*/
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-font-smoothing: none;
 }
 
 
 *:focus { outline: none!important; }
-/*::selection { background: none; }*/
+//::selection { background: none; }
 body, html { height: 100%; }
 body {
   overflow: hidden;
@@ -56,7 +57,6 @@ body {
   font-family: PixelFont, Tahoma, Helvetica, Arial, sans-serif;
   font-size: 11px;
   line-height: 11px;
-  -webkit-font-smoothing: none;
 }
 
 button, input {
@@ -68,7 +68,7 @@ a[href] {
   cursor: pointer;
 }
 
-button {
+button{
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -96,7 +96,7 @@ img {
 
 .instagram {
   opacity: 0;
-  animation: fadeIn 1000ms ease-out 100ms forwards;
+  animation: fadeIn 0ms ease-out 0ms forwards;
   /*width: 100%;*/
   /*max-width: 320px;*/
   /*height: 550px;*/
@@ -123,7 +123,7 @@ img {
     justify-content: space-between;
     height: 18px;
     padding: 2px;
-    background: $hi;
+    background: $g3;
     color: $wh;
     h1 {
       padding: 0 0 1px 3px;
@@ -196,6 +196,9 @@ img {
         }
       }
     }
+  }
+  .bar-active {
+    background: $hi;
   }
   .menu {
     ul {
@@ -416,6 +419,7 @@ img {
   .feed-type {
     height: 100%;
     overflow: auto;
+    padding: 1rem;
   }
   #home {
     a {
@@ -587,4 +591,10 @@ img {
     border-right: 1px solid $g3;
     box-shadow: none;
   }
+}
+
+
+.window-rolling {
+  transition: all 0.8s ease-out;
+  z-index: 4;
 }

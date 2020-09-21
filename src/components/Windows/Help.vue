@@ -1,7 +1,9 @@
 <template lang="pug">
   Window(:window-name="this.$options.name" :init-options="initOptions")
-    div Помощь
-    img(src="https://alexbsoft.github.io/win95.css/assets/confused_travolta.gif")
+    h1 Помощь
+    hr
+    slot
+    // img(src="https://alexbsoft.github.io/win95.css/assets/confused_travolta.gif")
 </template>
 
 <script>
@@ -10,6 +12,9 @@ import Window from "@/components/Window/Window";
 export default {
   name: 'Help',
   props: ['initOptions'],
+  deactivated() {
+    console.log('deactivated 2');
+  },
   components: {
     Window
   },
