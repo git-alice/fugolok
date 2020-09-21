@@ -237,7 +237,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./index.scss";
+@import "src/assets/css/index.scss";
 
 .my-handle {
   position: absolute;

@@ -1,6 +1,8 @@
 <template lang="pug">
-   Window(:initOptions="initOptions" :window-name="this.$options.name")
-    p initOptions
+  Window(:initOptions="initOptions" :window-name="this.$options.name")
+    button.btn.mr-2.mb-2.btn-primary(type='button', data-toggle='tooltip', data-placement='left', title='', data-original-title='The quick brown fox jumps over the lazy dog.')
+      span.btn-text Left
+
 </template>
 
 <script>

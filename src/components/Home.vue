@@ -97,7 +97,7 @@ export default {
 
 <style>
 
-@import "../assets/css/pixel.scss";
+@import "../assets/css/buttons.scss";
 
     #app {
         width: 100%;

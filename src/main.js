@@ -14,7 +14,7 @@ Vue.use(Notifications, {
 })
 
 // Theme js
-import './assets/js/pixel'
+// import './assets/js/pixel'
 
 // Cookie
 Vue.use(VueCookies);
