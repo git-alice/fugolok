@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Window_1 from "./components/Window_1";
 import Window_2 from "./components/Window_2";
 import Home from "./components/Home";
-import Library from "./components/Library";
+import Library from "./components/ImageLibrary/ImageLibrary";
 import Konva from './components/Konva'
 
 Vue.use(VueRouter)

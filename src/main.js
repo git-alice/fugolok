@@ -3,29 +3,39 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 import router from './router'
 import VuePreview from 'vue-preview'
 import VueTinyLazyloadImg from 'vue-tiny-lazyload-img'
+import Notifications from 'vue-notification'
 import VueCookies from 'vue-cookies'
 import store from './store'
 
+
+// Notifications
+Vue.use(Notifications, {
+  max: 1,
+})
+
+// Cookie
 Vue.use(VueCookies);
 
 // with parameters install
 Vue.use(VuePreview, {
   mainClass: 'pswp--minimal--dark',
   barsSize: {top: 0, bottom: 0},
-  captionEl: false,
-  fullscreenEl: false,
+  captionEl: true,
+  fullscreenEl: true,
   shareEl: false,
-  bgOpacity: 0.85,
   tapToClose: true,
-  tapToToggleControls: false
+  downloadEl: true,
+  tapToToggleControls: false,
+  bgOpacity: 1,
+  showAnimationDuration: 0,
+  hideAnimationDuration: 0
 })
 
 Vue.use(VueTinyLazyloadImg);
 
+Vue.component('vue-draggable-resizable', VueDraggableResizable)
 // optionally import default styles
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
-
-Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
 import App from './App.vue'
 
