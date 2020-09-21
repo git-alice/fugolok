@@ -1,6 +1,6 @@
 <template lang="pug">
     button.start-button.toggle
-        img(src="@/assets/start.png")
+        img(src="@/assets/img/start.png")
         b Start
 </template>
 

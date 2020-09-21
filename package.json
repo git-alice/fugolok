@@ -17,6 +17,7 @@
     "haml-plain-loader": "^1.0.0",
     "hamljs": "^0.6.2",
     "html2canvas": "^1.0.0-rc.5",
+    "jquery": "^3.5.1",
     "konva": "^6.0.0",
     "ssh2": "^0.8.9",
     "vue": "^2.6.11",

@@ -13,6 +13,9 @@ Vue.use(Notifications, {
   max: 1,
 })
 
+// Theme js
+import './assets/js/pixel'
+
 // Cookie
 Vue.use(VueCookies);
 

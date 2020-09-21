@@ -28,14 +28,16 @@
       @activated="onActivated",
       @deactivated="onDeactivated")
         div(slot="br")
-          img(:src="require(\"@/assets/resize_icon.png\")")
+          img(:src="require(\"@/assets/img/resize_icon.png\")")
         .inner
             header.bar.drag-handle(:class="{ 'bar-active' : active}")
                 h1
-                .buttons
+                .buttons(v-if="true")
                     a.minimize(v-on:click="rollWindow")
                     a.maximize(v-on:click="maximizeWindow")
                     a.close(v-on:click="closeWindow")
+                .buttons(v-if="false")
+                    a.close()
             nav.menu
                 ul
                     li

@@ -1,6 +1,6 @@
 <template lang="pug">
   button.task_button(@contextmenu.prevent="")
-    img(src="@/assets/start.png")
+    img(src="@/assets/img/start.png")
     b Окно {{ id }}
 </template>
 

@@ -52,11 +52,11 @@ export default {
   data() {
     return {
       icons: [
-        {'windowName': 'My films', 'src': require("@/assets/desktop_icons/computer.png")},
-        {'windowName': 'ExDropMe', 'src': require("@/assets/desktop_icons/upload.png")},
-        {'windowName': 'Help', 'src': require("@/assets/desktop_icons/net.png")},
-        {'windowName': 'Account', 'src': require("@/assets/desktop_icons/account.png")},
-        {'windowName': 'Library', 'src': require("@/assets/desktop_icons/folder.png")}
+        {'windowName': 'My films', 'src': require("@/assets/img/computer.png")},
+        {'windowName': 'ExDropMe', 'src': require("@/assets/img/upload.png")},
+        {'windowName': 'Help', 'src': require("@/assets/img/net.png")},
+        {'windowName': 'Account', 'src': require("@/assets/img/account.png")},
+        {'windowName': 'Library', 'src': require("@/assets/img/folder.png")}
       ],
     }
   },
@@ -96,6 +96,9 @@ export default {
 </script>
 
 <style>
+
+@import "../assets/css/pixel.scss";
+
     #app {
         width: 100%;
         height: 100%;
@@ -108,7 +111,7 @@ export default {
 
     @font-face {
         font-family: "PixelFont";
-        src: url("../fonts/MS Sans Serif.ttf");
+        src: url("../assets/fonts/MS Sans Serif.ttf");
     }
 
     ul {
