@@ -15,8 +15,6 @@ import Window from "@/components/Window/Window";
 export default {
   name: 'Account',
   props: ['initOptions'],
-  components: {
-    Window
-  },
+  components: { Window },
 }
 </script>

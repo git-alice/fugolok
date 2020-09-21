@@ -14,10 +14,6 @@ div(id="app", v-on:keyup.ctrl.right="testNoti")
 <script>
 export default {
   name: 'App',
-  methods: {
-    test() {
-      console.log('Ctrl + Right')
-    }
-  }
+  methods: {}
 }
 </script>
