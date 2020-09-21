@@ -31,7 +31,7 @@
           img(:src="require(\"@/assets/img/resize_icon.png\")")
         .inner
             header.bar.drag-handle(:class="{ 'bar-active' : active}")
-                h1
+                h1 {{ (content.title) ? content.title : ''}}
                 .buttons(v-if="true")
                     a.minimize(v-on:click="rollWindow")
                     a.maximize(v-on:click="maximizeWindow")
@@ -39,13 +39,14 @@
                 .buttons(v-if="false")
                     a.close()
             nav.menu
-                ul
-                    li
-                        a(href="#" target="_blank") Codepen
-                    li
-                        a(href="#" target="_blank") Scrollbars
-                    li
-                        a(href="#" target="_blank") Inspiration
+              br
+            //    ul
+            //        li
+            //            a(href="#" target="_blank") Codepen
+            //        li
+            //            a(href="#" target="_blank") Scrollbars
+            //        li
+            //            a(href="#" target="_blank") Inspiration
             .container
                 // input#input-home.menu-input(checked="true" name="menu" type="radio")
                 // label.menu-label(for="input-home") Home
@@ -55,9 +56,9 @@
                     .content-section.home
                         .feed
                             #home.feed-type
-                                div :X {{ x }} :Y {{ y }} :Z {{ z }}
                                 // button(@click="testAnime") Play
                                 slot
+                        div(style="padding: 5px;") :X {{ x }} :Y {{ y }} :Z {{ z }}
 </template>
 
 <script>
@@ -67,172 +68,195 @@ import Button from "@/components/Buttons/Button";
 export default {
   name: "WindowRaw",
   components: {Button},
-  props: ['initWidth', 'initHeight', 'initX', 'initY'],
-    data() {
-      return {
-        window_open: true,
-        active: false,
-        dragging: false,
-        rolling: false,
-        wWidth: this.initializeWidth(),
-        wHeight: this.initializeHeight(),
-        x: null,
-        y: null,
-        z: null,
-        maximized: false
-      }
+  props: {
+    initWidth: {
+      type: Number,
+      default: 400
     },
-    methods: {
-      closeWindow() {
-        this.$emit('closeWindow')
-      },
-      splitWindow(type) {
-        let taskbarHeight = 26,
-            h = window.innerHeight - taskbarHeight,
-            w = window.innerWidth / 2 ,
-            x = null,
-            y = null;
-
-        if (type === 'left') {
-          x = -20; y = -20;
-        } else if (type === 'right') {
-          x = w - 20; y = -20;
-        }
-
-        this.$refs.window.changeWidth(w);
-        this.$refs.window.changeHeight(h);
-        this.$refs.window.moveVertically(y);
-        this.$refs.window.moveHorizontally(x);
-
-        this.$emit('splitWindow', x, y, w, h)
-      },
-      maximizeWindow() {
-        let taskbarHeight = 26,
-            h = window.innerHeight - taskbarHeight,
-            w = window.innerWidth,
-            x = -20,
-            y = -20;
-
-        if (this.maximized) {
-          let hInit = 370,
-              wInit = 570;
-          x = (w - wInit) / 2;
-          y = (h - hInit) / 2;
-          h = hInit; w = wInit;
-          this.maximized = !this.maximized;
-        } else {
-          this.maximized = !this.maximized;
-        }
-
-        this.$refs.window.changeWidth(w);
-        this.$refs.window.changeHeight(h);
-        this.$refs.window.moveVertically(y);
-        this.$refs.window.moveHorizontally(x);
-
-        this.$emit('maximizeWindow', x, y, w, h)
-      },
-      rollWindow() {
-        let border = this.$refs.border;
-        console.log('rolling')
-        console.log(border.style.width)
-        this.rolling = true;
-
-        setTimeout(() => {
-          border.style.width = 0 + 'px';
-          border.style.height = 0 + 'px';
-          border.style.left = 0 + 'px';
-          border.style.top = window.innerHeight + 'px';
-        }, 1); // !
-        setTimeout(() => {
-          this.rolling = false;
-          this.$emit('rollWindow');
-        }, 1000);
-      },
-      onDragStart() {
-        this.active = true;
-      },
-      onDrag(x, y) {
-        this.x = x;
-        this.y = y;
-        this.z = this.$refs.window.zIndex;
-
-        let draggingWindow = this.$refs.window.$el
-        let border = this.$refs.border;
-        this.dragging = true;
-        border.style.left = (x + 20) + 'px';
-        border.style.top = (y + 20) + 'px';
-        border.style.width = draggingWindow.style.width;
-        border.style.height = draggingWindow.style.height;
-      },
-      onDragStop(x, y) {
-        console.log('onDragStop')
-        this.dragging = false;
-        let border = this.$refs.border;
-        // border.style.width = 0;
-        // border.style.height = 0;
-        this.$emit('onDragStop', x, y)
-      },
-      onResize(left, top, width, height) {
-        let border = this.$refs.border;
-        this.dragging = true;
-        border.style.width = width + 'px';
-        border.style.height = height + 'px';
-      },
-      onResizingStop(left, top, width, height) {
-        this.dragging = false;
-        this.$emit('onResizingStop', width, height)
-      },
-      onActivated() {
-        this.$refs.window.zIndex = 5;
-        this.active = true;
-        this.$emit('onActivated')
-      },
-      onDeactivated() {
-        this.active = false;
-        this.$refs.window.zIndex = 4;
-      },
-      initializeWidth() {
-        return this.initWidth ? this.initWidth : 300;
-      },
-      initializeHeight() {
-        return this.initHeight ? this.initHeight : 200;
-      },
-      testAnime() {
-        let testAnime = anime({
-          targets: this.$parent.$el,
-          keyframes: [
-            {scaleX: 0.7, scaleY: 0.7, opacity: 0},
-            {scaleX: 0.7, scaleY: 0.7, opacity: 1},
-            {scaleX: 0.5, scaleY: 0.5, opacity: 0},
-            {scaleX: 0.5, scaleY: 0.5, opacity: 1},
-            {scaleX: 0.3, scaleY: 0.3, opacity: 0},
-            {scaleX: 0.3, scaleY: 0.3, opacity: 1},
-          ],
-          opacity: 0,
-          duration: 1000,
-          // direction: 'alternate',
-          easing: 'linear'
-        })
-        testAnime.restart();
-        this.closeWindow()
-      }
+    initHeight: {
+      type: Number,
+      default: 400
     },
-    mounted() {
-      let x = this.initX ? this.initX : 0;
-      let y = this.initY ? this.initY : 0;
+    initX: {
+      type: Number,
+      default: 100
+    },
+    initY: {
+      type: Number,
+      default: 100
+    },
+    content: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    }
+  },
+  data() {
+    return {
+      window_open: true,
+      active: false,
+      dragging: false,
+      rolling: false,
+      wWidth: this.initializeWidth(),
+      wHeight: this.initializeHeight(),
+      x: null,
+      y: null,
+      z: null,
+      maximized: false,
+    }
+  },
+  methods: {
+    closeWindow() {
+      this.$emit('closeWindow')
+    },
+    splitWindow(type) {
+      let taskbarHeight = 26,
+          h = window.innerHeight - taskbarHeight,
+          w = window.innerWidth / 2 ,
+          x = null,
+          y = null;
 
+      if (type === 'left') {
+        x = -20; y = -20;
+      } else if (type === 'right') {
+        x = w - 20; y = -20;
+      }
+
+      this.$refs.window.changeWidth(w);
+      this.$refs.window.changeHeight(h);
       this.$refs.window.moveVertically(y);
       this.$refs.window.moveHorizontally(x);
 
+      this.$emit('splitWindow', x, y, w, h)
+    },
+    maximizeWindow() {
+      let taskbarHeight = 26,
+          h = window.innerHeight - taskbarHeight,
+          w = window.innerWidth,
+          x = -20,
+          y = -20;
+
+      if (this.maximized) {
+        let hInit = 370,
+            wInit = 570;
+        x = (w - wInit) / 2;
+        y = (h - hInit) / 2;
+        h = hInit; w = wInit;
+        this.maximized = !this.maximized;
+      } else {
+        this.maximized = !this.maximized;
+      }
+
+      this.$refs.window.changeWidth(w);
+      this.$refs.window.changeHeight(h);
+      this.$refs.window.moveVertically(y);
+      this.$refs.window.moveHorizontally(x);
+
+      this.$emit('maximizeWindow', x, y, w, h)
+    },
+    rollWindow() {
       let border = this.$refs.border;
-      border.style.width = this.initializeWidth() + 'px';
-      border.style.height = this.initializeHeight() + 'px';
+      console.log('rolling')
+      console.log(border.style.width)
+      this.rolling = true;
+
+      setTimeout(() => {
+        border.style.width = 0 + 'px';
+        border.style.height = 0 + 'px';
+        border.style.left = 0 + 'px';
+        border.style.top = window.innerHeight + 'px';
+      }, 1); // !
+      setTimeout(() => {
+        this.rolling = false;
+        this.$emit('rollWindow');
+      }, 1000);
+    },
+    onDragStart() {
+      this.active = true;
+    },
+    onDrag(x, y) {
+      this.x = x;
+      this.y = y;
+      this.z = this.$refs.window.zIndex;
+
+      let draggingWindow = this.$refs.window.$el
+      let border = this.$refs.border;
+      this.dragging = true;
       border.style.left = (x + 20) + 'px';
       border.style.top = (y + 20) + 'px';
+      border.style.width = draggingWindow.style.width;
+      border.style.height = draggingWindow.style.height;
     },
-    created() {
-      console.log('created rawWindow');
+    onDragStop(x, y) {
+      console.log('onDragStop')
+      this.dragging = false;
+      let border = this.$refs.border;
+      // border.style.width = 0;
+      // border.style.height = 0;
+      this.$emit('onDragStop', x, y)
+    },
+    onResize(left, top, width, height) {
+      let border = this.$refs.border;
+      this.dragging = true;
+      border.style.width = width + 'px';
+      border.style.height = height + 'px';
+    },
+    onResizingStop(left, top, width, height) {
+      this.dragging = false;
+      this.$emit('onResizingStop', width, height)
+    },
+    onActivated() {
+      this.$refs.window.zIndex = 5;
+      this.active = true;
+      this.$emit('onActivated')
+    },
+    onDeactivated() {
+      this.active = false;
+      this.$refs.window.zIndex = 4;
+    },
+    initializeWidth() {
+      return this.initWidth ? this.initWidth : 300;
+    },
+    initializeHeight() {
+      return this.initHeight ? this.initHeight : 200;
+    },
+    testAnime() {
+      let testAnime = anime({
+        targets: this.$parent.$el,
+        keyframes: [
+          {scaleX: 0.7, scaleY: 0.7, opacity: 0},
+          {scaleX: 0.7, scaleY: 0.7, opacity: 1},
+          {scaleX: 0.5, scaleY: 0.5, opacity: 0},
+          {scaleX: 0.5, scaleY: 0.5, opacity: 1},
+          {scaleX: 0.3, scaleY: 0.3, opacity: 0},
+          {scaleX: 0.3, scaleY: 0.3, opacity: 1},
+        ],
+        opacity: 0,
+        duration: 1000,
+        // direction: 'alternate',
+        easing: 'linear'
+      })
+      testAnime.restart();
+      this.closeWindow()
     }
+  },
+  mounted() {
+    let x = this.initX ? this.initX : 0;
+    let y = this.initY ? this.initY : 0;
+
+    this.$refs.window.moveVertically(y);
+    this.$refs.window.moveHorizontally(x);
+
+    let border = this.$refs.border;
+    border.style.width = this.initializeWidth() + 'px';
+    border.style.height = this.initializeHeight() + 'px';
+    border.style.left = (x + 20) + 'px';
+    border.style.top = (y + 20) + 'px';
+  },
+  created() {
+    console.log('created rawWindow');
+  }
 }
 </script>
 

@@ -48,7 +48,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url("https://unomoralez.com/content/files/catalog2/source/Sailor_S_T00000_1561027772.png");
+  //background: url("https://unomoralez.com/content/files/catalog2/source/Sailor_S_T00000_1561027772.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-color: $bg;
@@ -225,7 +225,7 @@ img {
   }
   .container {
     position: relative;
-    height: calc(100% - 61px);
+    height: calc(100% - 24px);
   }
   .content {
     height: calc(100% - 24px);

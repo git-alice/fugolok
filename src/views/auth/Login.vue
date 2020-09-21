@@ -12,10 +12,10 @@ export default {
   data() {
     return {
       initOptions: {
-        initWidth: 400,
-        initHeight: 300,
-        initX: window.innerWidth / 2 - 400 / 2,
-        initY: window.innerHeight / 2 - 300 / 2,
+        initWidth: 600,
+        initHeight: 220,
+        initX: window.innerWidth / 2 - 600 / 2,
+        initY: window.innerHeight / 2 - 220 / 2,
       }
     }
   },

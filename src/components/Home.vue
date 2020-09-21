@@ -95,9 +95,13 @@ export default {
 }
 </script>
 
-<style>
+<style >
+
+@import '~bootstrap-4-grid/css/grid.min.css';
 
 @import "../assets/css/buttons.scss";
+@import "../assets/css/input.scss";
+@import "../assets/css/utils.scss";
 
     #app {
         width: 100%;
