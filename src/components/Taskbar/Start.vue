@@ -1,22 +1,22 @@
 <template lang="pug">
-    button.start-button.toggle
+    button.start__button.toggle
         img(src="@/assets/img/start.png")
         b Start
 </template>
 
 <script>
-    export default {
-    }
+export default {
+}
 </script>
 <style lang="scss">
-    .start-button {
-        top: 1px;
-        bottom: 1px;
-        font-weight: 500;
-        font-size: 14px;
-        b {
-            padding-left: 3px;
-        }
-    }
-
+.start__button {
+  margin: 1px;
+  top: 1px;
+  bottom: 1px;
+  font-weight: 500;
+  font-size: 14px;
+  b {
+    padding-left: 3px;
+  }
+}
 </style>

@@ -1,5 +1,5 @@
 <template lang="pug">
-  button.task_button(@contextmenu.prevent="")
+  button.task__button(@contextmenu.prevent="")
     img(src="@/assets/img/start.png")
     b Окно {{ id }}
 </template>
@@ -12,10 +12,11 @@
 </script>
 
 <style>
-    .task_button {
-        top: 1px;
-        bottom: 1px;
-        font-weight: 500;
-        font-size: 14px;
-    }
+.task__button {
+    margin: 1px;
+    top: 1px;
+    bottom: 1px;
+    font-weight: 500;
+    font-size: 14px;
+}
 </style>

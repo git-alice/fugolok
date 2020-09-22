@@ -1,11 +1,15 @@
 <template lang="pug">
     div.taskbar
-        Start
-        div()
-        button.task_button(v-for="(v, k, i) in getAllWindows()")
-          // img(src="@/assets/desktop_icons/account.png")
-          p Окно {{ k }}
-        button.task_button(@click="closeAllWindows" style="margin-left: auto;") C.A.
+      // Start button
+      Start(@click="")
+
+      // Left status bar | Opened windows
+      button.task__button(v-for="(v, k, i) in getAllWindows()")
+        // img(src="@/assets/desktop_icons/account.png")
+        p Окно {{ k }}
+
+      // Right status bar
+      button.task__button(@click="closeAllWindows" style="margin-left: auto;") C.A.
 </template>
 
 <script>
@@ -48,25 +52,25 @@ export default {
 </script>
 
 <style lang="scss">
-    // default windows 95 colors
-    $g1: #ddd;
-    $g2: #C0C0C0;
-    $g3: #888;
-    $hi: #00087E;
-    $wh: white;
-    $bl: black;
-    $bg: #149091;
+// default windows 95 colors
+$g1: #ddd;
+$g2: #C0C0C0;
+$g3: #888;
+$hi: #00087E;
+$wh: white;
+$bl: black;
+$bg: #149091;
 
-    .taskbar {
-        display: flex;
-        flex-direction: row;
-        z-index: 9;
-        position: fixed;
-        bottom: 0px;
-        left: 0px;
-        right:0px;
-        height: 26px;
-        background: $g2;
-        border: outset 2px;
-    }
+.taskbar {
+    display: flex;
+    flex-direction: row;
+    z-index: 9;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right:0px;
+    height: 26px;
+    background: $g2;
+    border: outset 2px;
+}
 </style>
