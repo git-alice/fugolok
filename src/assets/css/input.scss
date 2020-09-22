@@ -12,6 +12,10 @@ label {
   position: relative;
 }
 
+.form-group label::first-letter {
+  text-decoration: underline;
+}
+
 .form-control,
 .form-control:focus {
   //font-size: .6rem;

@@ -6,12 +6,14 @@ import VueTinyLazyloadImg from 'vue-tiny-lazyload-img'
 import Notifications from 'vue-notification'
 import VueCookies from 'vue-cookies'
 import store from './store'
-
+import VTooltip from 'v-tooltip'
 
 // Notifications
 Vue.use(Notifications, {
   max: 1,
 })
+
+Vue.use(VTooltip)
 
 // Theme js
 // import './assets/js/pixel'

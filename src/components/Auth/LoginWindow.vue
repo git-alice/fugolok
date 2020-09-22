@@ -1,7 +1,9 @@
 <template lang="pug">
   Window(
-    :initOptions="initOptions"
-    :window-name="this.$options.name"
+    :initOptions="initOptions",
+    :window-name="this.$options.name",
+    :windowType="'info'",
+    :content="{title: 'Welcome to Ugolok', infoTooltip: 'Вы находитесь на странице авторизации, если вы еще не с нами - зарегистрируйтесь.'}"
   )
     div.sections
       div.icon__section.col-2
@@ -18,7 +20,7 @@
           label.mr-3 Password:
           input.form-control.w-75(type='text')
       div.buttons__section.col-2
-        button.btn.btn-sm.btn-primary.border-dark(type='button')
+        button.btn.btn-sm.btn-primary.border-dark(type='button' @click="auth")
           span.btn-text OK
         br
         button.btn.btn-sm.btn-primary(type='button')
@@ -31,14 +33,13 @@ import Window from "@/components/Window/Window";
 export default {
   name: 'LoginWindow',
   props: ['initOptions', 'windowName',],
-  methods: {},
+  methods: {
+    auth(event) {
+      setTimeout(() => {this.$router.push('home')}, 500)
+    }
+  },
   components: { Window },
-  mounted() {
-    console.log('initOptions', this.initOptions)
-    console.log('windowName', this.windowName)
-    console.log('test', this.test)
-    console.log('windowName', this)
-  }
+  mounted() {}
 }
 </script>
 

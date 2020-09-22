@@ -4,6 +4,8 @@
     :init-height="initOptions.initHeight",
     :init-x="initOptions.initX",
     :init-y="initOptions.initY"
+    :windowType="windowType",
+    :content="content",
     @onDragStop="onDragWindowStop",
     @onResizingStop="onWindowResizingStop",
     @closeWindow="onCloseWindow",
@@ -21,7 +23,7 @@ import WindowRaw from '@/components/Window/WindowRaw'
 export default {
     name: 'Window',
     data() {return {}},
-    props: ['initOptions', 'windowName'],
+    props: ['initOptions', 'windowName', 'windowType','content'],
     created() {
       console.log('from Window')
       console.log(this.initOptions)

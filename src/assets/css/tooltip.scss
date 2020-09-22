@@ -1,0 +1,11 @@
+.tooltip {
+  z-index: 5;
+}
+
+.tooltip-inner {
+  width: 300px;
+  padding: 5px 11px;
+  background: beige;
+  border: 1px solid black;
+  box-shadow: 0.3rem 0.3rem rgba(42, 53, 79, 0.9);
+}

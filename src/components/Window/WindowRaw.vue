@@ -32,12 +32,12 @@
         .inner
             header.bar.drag-handle(:class="{ 'bar-active' : active}")
                 h1 {{ (content.title) ? content.title : ''}}
-                .buttons(v-if="true")
+                .buttons(v-if="windowType=='default'")
                     a.minimize(v-on:click="rollWindow")
                     a.maximize(v-on:click="maximizeWindow")
                     a.close(v-on:click="closeWindow")
-                .buttons(v-if="false")
-                    a.close()
+                .buttons(v-else-if="windowType=='info'")
+                    a.help(v-tooltip="{content: content.infoTooltip, trigger: 'hover'}")
             nav.menu
               br
             //    ul
@@ -63,7 +63,7 @@
 
 <script>
 import anime from 'animejs/lib/anime.es.js';
-import Button from "@/components/Buttons/Button";
+import Button from "@/components/Elements/Buttons/Button";
 
 export default {
   name: "WindowRaw",
@@ -84,6 +84,10 @@ export default {
     initY: {
       type: Number,
       default: 100
+    },
+    windowType: {
+      type: String,
+      default: 'default'
     },
     content: {
       type: Object,
@@ -255,7 +259,7 @@ export default {
     border.style.top = (y + 20) + 'px';
   },
   created() {
-    console.log('created rawWindow');
+    console.log('created rawWindow', this.windowType);
   }
 }
 </script>
