@@ -6,7 +6,7 @@
       // Left status bar | Opened windows
       button.task__button(v-for="(v, k, i) in getAllWindows()")
         // img(src="@/assets/desktop_icons/account.png")
-        p Окно {{ k }}
+        p Window {{ k }}
 
       // Right status bar
       button.task__button(@click="closeAllWindows" style="margin-left: auto;") C.A.

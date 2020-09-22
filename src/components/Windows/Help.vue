@@ -1,6 +1,6 @@
 <template lang="pug">
   Window(:window-name="this.$options.name" :init-options="initOptions")
-    h1 Помощь
+    h1 Help
     hr
     slot
     // img(src="https://alexbsoft.github.io/win95.css/assets/confused_travolta.gif")

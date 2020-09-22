@@ -17,6 +17,6 @@
     top: 1px;
     bottom: 1px;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 11px;
 }
 </style>
