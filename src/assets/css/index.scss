@@ -104,7 +104,7 @@ img {
   margin: 0;
 }
 
-.instagram {
+.vdr__window {
   opacity: 0;
   animation: fadeIn 0ms ease-out 0ms forwards;
   /*width: 100%;*/
@@ -246,7 +246,7 @@ img {
       }
     }
   }
-  .container {
+  .window__container {
     position: relative;
     height: calc(100% - 24px);
   }
@@ -335,7 +335,7 @@ img {
 }
 
 .home {
-  .feed {
+  .content__body {
     height: calc(100% - 24px);
   }
 }
@@ -432,11 +432,11 @@ img {
       }
     }
   }
-  .feed {
+  .content__body {
     height: calc(100% - 209px);
   }
 }
-.feed {
+.content__body {
   padding: 2px;
   box-shadow: inset -1px -1px 0 0 $g1, inset 1px 1px 0 0 $g3, inset -2px -2px 0 0 $g2, inset 2px 2px 0 0 $bl;
   .feed-type {
@@ -549,6 +549,12 @@ img {
   }
 }
 
+.content__status {
+  margin-top: 1px;
+  padding: 3px;
+  height: 17px;
+  box-shadow: inset -1px -1px 0 0 $g1, inset 1px 1px 0 0 $g3, inset -2px -2px 0 0 $g2, inset 1px 1px 0 0 $g3;
+}
 
 // scrollbar
 // https://codepen.io/louh/pen/oZJQvm
@@ -614,10 +620,4 @@ img {
     border-right: 1px solid $g3;
     box-shadow: none;
   }
-}
-
-
-.window-rolling {
-  transition: all 0.8s ease-out;
-  z-index: 4;
 }
