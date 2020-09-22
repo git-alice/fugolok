@@ -1,21 +1,20 @@
 <template lang="pug">
-    div(
-      style="width: 100%; height: 100%"
-      ref="layout")
-      div(v-for="(value, name) in allWindows()" :key="name")
+    div(style="width: 100%; height: 100%", ref="layout")
+      // --- All Windows ---
+      div(v-for="(value, name) in getAllWindows()" :key="name")
         keep-alive
           component(:is="name" v-if="value.isOpen" :initOptions="value" :ref="name")
             div {{ name }}
             div {{ value }}
 
+      // --- All Icons ---
       div(v-for="icon in icons")
         Icon(:href-icon="icon.src", :window-name="icon.windowName")
 
-
+      // --- Taskbar ---
       Taskbar
 
-      notifications(group="info" classes="notification-block")
-
+      // --- ContextMenu ---
       ContextMenu(ref="menu")
         template(slot-scope="{ contextData }")
           ContextMenuItem(@click.native="")
@@ -23,26 +22,29 @@
           ContextMenuItem(@click.native="")
             div Action 2 {{ contextData }}
 
-      button(@click="testNoti") Get notification
+      // --- Notfications ---
+      notifications(group="info" classes="notification-block")
 
+      // --- KeyResizing ---
       Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindow('right')")
       Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindow('left')")
       Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindow('full')")
       Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindow('mini')")
 
+      // --- TEST BUTTONS ---
       // button(@contextmenu.prevent="$refs.menu.open($event, 'Payload')") Get contextmenu
-
+      // button(@click="testNotification") Get notification
 </template>
 
 <script>
 import Help from "@/components/Windows/Help";
-import ExDropMe from './Windows/ExDropMe'
+import ExDropMe from '../../components/Windows/ExDropMe'
 import Account from "@/components/Windows/Account";
 import Library from "@/components/Windows/Library";
 
-import Taskbar from './Taskbar/Taskbar'
-import Button from "./Buttons/Button";
-import Icon from "./Icons/Icon"
+import Taskbar from '../../components/Taskbar/Taskbar'
+import Button from "../../components/Elements/Buttons/Button";
+import Icon from "../../components/Elements/Icons/Icon"
 
 import ContextMenu from "@/components/ContextMenu/ContextMenu";
 import ContextMenuItem from "@/components/ContextMenu/ContextMenuItem";
@@ -64,32 +66,36 @@ export default {
     Library, ExDropMe, Account, Help, Taskbar, Button, Icon, ContextMenu, ContextMenuItem, Keypress: () => import('vue-keypress')
   },
   methods: {
-    allWindows() {
-      console.log('from allWindows')
+    /**
+     * Returns all open Windows.
+     */
+    getAllWindows() {
       return this.$store.getters.allWindows;
     },
-    testNoti() {
+    /**
+     * Split active window by keypress.
+     */
+    splitWindow(resizeType) {
+      let window = this.$children.filter(component => component.$options.name === this.$store.getters.activeWindow)[0].$children[0].$children[0]
+      if (window.active) {
+        if (resizeType === 'full') { window.maximizeWindow() }
+        else if (resizeType === 'mini') { window.rollWindow() }
+        else { window.splitWindow(resizeType) }
+      }
+    },
+    /**
+     * TEST NOTIFICATION | TODO: Remove it
+     */
+    testNotification() {
       this.$notify({
         group: 'info',
         title: 'Important message',
         text: 'Hello user! This is a notification!',
       });
     },
-    splitWindow(type) {
-      let window = this.$children.filter(component => component.$options.name === this.$store.getters.activeWindow)[0].$children[0].$children[0]
-      if (window.active) {
-        if (type === 'full') {
-          window.maximizeWindow()
-        } else if (type === 'mini') {
-          window.rollWindow()
-        } else {
-          window.splitWindow(type)
-        }
-      }
-    }
   },
   mounted() {
-    // this.$store.dispatch('setDefaultConfig', this)
+    // Load windows from cookie
     this.$store.dispatch('loadCookieWindows', this);
   }
 }
@@ -99,53 +105,16 @@ export default {
 
 @import '~bootstrap-4-grid/css/grid.min.css';
 
-@import "../assets/css/buttons.scss";
-@import "../assets/css/input.scss";
-@import "../assets/css/utils.scss";
+@import "../../assets/css/custom_vue_draggable_resizable.scss";
 
-    #app {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-    }
-    body{
-        /*overflow: hidden;*/
-    }
+@import "../../assets/css/buttons.scss";
+@import "../../assets/css/input.scss";
+@import "../../assets/css/tooltip.scss";
+@import "../../assets/css/utils.scss";
 
-    @font-face {
-        font-family: "PixelFont";
-        src: url("../assets/fonts/MS Sans Serif.ttf");
-    }
-
-    ul {
-        list-style-type: none;
-    }
-
-
-  /*.handle {*/
-  /*  position: absolute;*/
-  /*  height: 15px !important;*/
-  /*  width: 15px !important;*/
-  /*  border: none;*/
-  /*  box-model: border-box;*/
-  /*}*/
-
-  .handle-tl, .handle-tm, .handle-tr, .handle-mr, .handle-bl, .handle-ml, .handle-bm {
-    display: none !important;
-  }
-
-  /*.handle-br {*/
-  /*  bottom: 2px !important;*/
-  /*  right: 2px !important;*/
-  /*  display: block !important;*/
-  /*  background: url("https://i.paste.pics/7df0e732e2bfdb15bdca924f3345c51e.png") !important;*/
-  /*  z-index: 2 !important;*/
-  /*}*/
-
-    .notification-block {
-      padding: 15px;
-      margin: 10px;
-    }
+@font-face {
+  font-family: "PixelFont";
+  src: url("../../assets/fonts/MS Sans Serif.ttf");
+}
 
 </style>

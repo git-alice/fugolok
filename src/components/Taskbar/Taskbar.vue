@@ -2,49 +2,49 @@
     div.taskbar
         Start
         div()
-        button.task_button(v-for="(v, k, i) in allWindows()")
+        button.task_button(v-for="(v, k, i) in getAllWindows()")
           // img(src="@/assets/desktop_icons/account.png")
           p Окно {{ k }}
         button.task_button(@click="closeAllWindows" style="margin-left: auto;") C.A.
 </template>
 
 <script>
-    import Start from './Start'
-    import TaskButton from './TaskButton'
+import Start from './Start'
+import TaskButton from './TaskButton'
 
-    export default {
-        name: "Taskbar",
-        data: () => {
-          return {}
-        },
-        components: {
-          Start, TaskButton
-        },
-        mounted() {
-          // console.log(this.windows)
-          // this.windows = this.$store.getters.allWindows;
-          // console.log(this.windows)
-          // let windows = this.$parent.$children.filter((el) => {
-          //     if (el.$children) {
-          //         return el.$children[0].id
-          //     }
-          // }).map((el) => {
-          //     return el.$children[0]
-          // });
-          // this.windows = windows
-        },
-        created() {
-          console.log('from Taskbar')
-        },
-        methods: {
-            allWindows() {
-              return this.$store.getters.allWindows;
-            },
-            closeAllWindows(event) {
-              this.$store.dispatch('deleteAllWindows', this);
-            }
-          }
+export default {
+  name: "Taskbar",
+  data: () => {
+    return {}
+  },
+  components: {
+    Start, TaskButton
+  },
+  mounted() {
+    // console.log(this.windows)
+    // this.w indows = this.$store.getters.getAllWindows;
+    // console.log(this.windows)
+    // let windows = this.$parent.$children.filter((el) => {
+    //     if (el.$children) {
+    //         return el.$children[0].id
+    //     }
+    // }).map((el) => {
+    //     return el.$children[0]
+    // });
+    // this.windows = windows
+  },
+  created() {
+    console.log('from Taskbar')
+  },
+  methods: {
+      getAllWindows() {
+        return this.$store.getters.allWindows;
+      },
+      closeAllWindows(event) {
+        this.$store.dispatch('deleteAllWindows', this);
+      }
     }
+}
 </script>
 
 <style lang="scss">
