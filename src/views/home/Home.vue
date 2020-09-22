@@ -26,10 +26,10 @@
       notifications(group="info" classes="notification-block")
 
       // --- KeyResizing ---
-      Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindow('right')")
-      Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindow('left')")
-      Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindow('full')")
-      Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindow('mini')")
+      Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
+      Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindowByKeys('left')")
+      Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindowByKeys('full')")
+      Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindowByKeys('mini')")
 
       // --- TEST BUTTONS ---
       // button(@contextmenu.prevent="$refs.menu.open($event, 'Payload')") Get contextmenu
@@ -75,7 +75,7 @@ export default {
     /**
      * Split active window by keypress.
      */
-    splitWindow(resizeType) {
+    splitWindowByKeys(resizeType) {
       let window = this.$children.filter(component => component.$options.name === this.$store.getters.activeWindow)[0].$children[0].$children[0]
       if (window.active) {
         if (resizeType === 'full') { window.maximizeWindow() }
@@ -101,11 +101,11 @@ export default {
 }
 </script>
 
-<style >
+<style lang="scss">
 
 @import '~bootstrap-4-grid/css/grid.min.css';
 
-@import "../../assets/css/custom_vue_draggable_resizable.scss";
+@import "../../assets/css/index.scss";
 
 @import "../../assets/css/buttons.scss";
 @import "../../assets/css/input.scss";
