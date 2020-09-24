@@ -124,19 +124,20 @@ export default {
         }
     },
     mutations: {
-        // STATE!
+        /**
+         * Mutations are used to update the state
+         */
         updateStateWindows(state, windows) {
-            console.log('Windows cookie updated');
-            console.log(state.windows)
-            console.log(windows)
             state.windows = windows;
-            console.log(state.windows)
         },
         updateStateWindowName(state, activeWindow) {
             state.activeWindow = activeWindow;
         }
     },
     getters: {
+        /**
+         * Getters are used to take data from the state
+         */
         allWindows(state) {
             return state.windows
         },
