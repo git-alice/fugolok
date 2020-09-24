@@ -1,29 +1,47 @@
 export default {
     state: {
         windows: {},
-        activeWindow: 'Library'
+        activeWindow: ''
     },
     actions: {
+        /**
+         * Set default config with help window and put in into cookies.
+         * Default config usually applied on the first login or something get wrong.
+         */
         setDefaultConfig(context, vm) {
-            let windows = {'Help': {
+            // Let me show 'Help' if it's first start, or something shit happens.
+            let defaultWindows = {
+                'Help': {
                     initHeight: 585,
                     initWidth: 375,
                     initX: 0,
                     initY: 0,
                     isOpen: true
-                },}
-            let defaultConfig = {'openedWindows': windows}
+                },
+            }
 
-            // context.commit('updateStateWindows', windows) // Под вопросом
+            // TODO: To move the interaction to a separate file ~config.js
+            let defaultConfig = {'openedWindows': defaultWindows}
+
+            // context.commit('updateStateWindows', windows) // TODO: Под вопросом
+
+            // Put in `userConfig`
             vm.$cookies.set('userConfig', defaultConfig)
         },
+        /**
+         * Update windows in the config and cookies;
+         * Where: options.window -> Object with windows properties;
+         *        options.vm -> `this`, that is, Vue object.
+         */
         updateWindowsConfig(context, options) {
-            console.log('updateWindowsConfig')
+            // options.windows -> object with window's properties
             let windows = options.windows;
-            console.log(windows)
+            // Get `userConfig` from cookies
             let cookiesConfig = options.vm.$cookies.get('userConfig');
+            // Merge cookiesConfig={openedWindows: {...}, ...} and {openedWindows: windows}
             let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
-            console.log(updatedUserConfig)
+
+            // Put in `userConfig`
             options.vm.$cookies.set('userConfig', updatedUserConfig)
         },
         setCookies(context, options) {
