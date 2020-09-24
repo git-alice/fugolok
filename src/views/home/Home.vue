@@ -43,11 +43,11 @@ import Account from "@/components/Windows/Account";
 import Library from "@/components/Windows/Library";
 
 import Taskbar from '../../components/Taskbar/Taskbar'
-import Button from "../../components/Elements/Buttons/Button";
-import Icon from "../../components/Elements/Icons/Icon"
+import Button from "../../components/Elements/Button/Button";
+import Icon from "../../components/Elements/Icon/Icon"
 
-import ContextMenu from "@/components/ContextMenu/ContextMenu";
-import ContextMenuItem from "@/components/ContextMenu/ContextMenuItem";
+import ContextMenu from "@/components/Elements/ContextMenu/ContextMenu";
+import ContextMenuItem from "@/components/Elements/ContextMenu/ContextMenuItem";
 
 export default {
   name: 'Home',
@@ -95,6 +95,8 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$options.components)
+
     // Load windows from cookie
     this.$store.dispatch('loadCookieWindows', this);
   }

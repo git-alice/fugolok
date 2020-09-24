@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import Window from "@/components/Window/Window";
-import ImageLibrary from "@/components/ImageLibrary/ImageLibrary";
+import Window from "@/components/Elements/Window/Window";
+import ImageLibrary from "@/components/Elements/ImageLibrary/ImageLibrary";
 
 export default {
   name: 'Library',

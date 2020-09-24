@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import WindowRaw from '@/components/Window/WindowRaw'
+import WindowRaw from '@/components/Elements/Window/WindowRaw'
 
 export default {
     name: 'Window',

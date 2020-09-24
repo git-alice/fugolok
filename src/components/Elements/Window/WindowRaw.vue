@@ -16,7 +16,7 @@
       class-name-handle="my-handle",
       :w="initialWidth",
       :h="initialHeight",
-      :z="4",
+      :z="z",
       :min-width="300",
       :min-height="200",
       :drag-handle="'.drag-handle'",
@@ -55,7 +55,7 @@
 
 <script>
 import anime from 'animejs/lib/anime.es.js';
-import Button from "@/components/Elements/Buttons/Button";
+import Button from "@/components/Elements/Button/Button";
 
 export default {
   name: "WindowRaw",
@@ -98,6 +98,7 @@ export default {
       dragging: false, // ?
       rolling: false, // ?
       maximized: false, // ?
+      z: 4,
       // To display on the window
       xDisplay: null,
       yDisplay: null,
@@ -269,6 +270,7 @@ export default {
     // Setting initial position values
     let x = this.initX ? this.initX : 0;
     let y = this.initY ? this.initY : 0;
+    this.xDisplay = x; this.yDisplay = y; this.zDisplay = this.z;
     this.$refs.window.moveVertically(y);
     this.$refs.window.moveHorizontally(x);
 
@@ -284,5 +286,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../assets/css/custom_vue_draggable_resizable.scss";
+@import "../../../assets/css/custom_vue_draggable_resizable";
 </style>

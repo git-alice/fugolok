@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Window from "@/components/Window/Window";
+import Window from "@/components/Elements/Window/Window";
 
 export default {
   name: 'Help',

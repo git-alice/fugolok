@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Button from "@/components/Elements/Buttons/Button";
+import Button from "@/components/Elements/Button/Button";
 export default {
   name: "Test",
   components: {Button},

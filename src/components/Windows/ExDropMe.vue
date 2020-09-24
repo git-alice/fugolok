@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import Window from '@/components/Window/Window'
-import DropMeFileForm from '@/components/DropMeFile/Form'
+import Window from '@/components/Elements/Window/Window'
+import DropMeFileForm from '@/components/Elements/DropMeFile/Form'
 
 export default {
   name: 'ExDropMe',

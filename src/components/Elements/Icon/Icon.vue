@@ -1,8 +1,5 @@
 <template lang="pug">
-  div(
-    class="icon",
-    @click="openWindow"
-    )
+  div(class="icon", @click="openWindow")
     img(:src="hrefIcon")
     div {{ windowName }}
 </template>
@@ -10,12 +7,11 @@
 <script>
 export default {
   name: "Icon",
-  data() {
-    return {}
-  },
+  data() { return {} },
   props: ['hrefIcon', 'windowName'],
   methods: {
     openWindow() {
+      // Add window to store
       this.$store.dispatch('appendWindow', {windowName: this.windowName, vm: this})
     }
   }
