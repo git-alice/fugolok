@@ -98,8 +98,8 @@ export default {
          * Delete window from cookies and state
          */
         deleteWindow(context, options) {
-            let windows = context.state.openedWindows;
-            if (options.windowName in Object.keys(windows)) delete windows[options.windowName];
+            let windows = Object.assign({}, context.state.windows)
+            if (options.windowName in windows) delete windows[options.windowName];
 
             let cookiesConfig = options.vm.$cookies.get('userConfig');
             let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows});
