@@ -5,6 +5,7 @@
     :init-x="initOptions.initX",
     :init-y="initOptions.initY"
     :windowType="windowType",
+    :window-name="windowName",
     :content="content",
     @onDragStop="onDragWindowStop",
     @onResizingStop="onWindowResizingStop",

@@ -33,7 +33,7 @@
           img(:src="require(\"@/assets/img/resize_icon.png\")")
         .inner
             header.bar.drag-handle(:class="{ 'bar-active' : active}")
-                h1 {{ (content.title) ? content.title : ''}}
+                h1 {{ (content.title) ? content.title : windowName}}
                 .buttons(v-if="windowType=='default'")
                     a.minimize(v-on:click="rollWindow")
                     a.maximize(v-on:click="maximizeWindow")
@@ -80,6 +80,10 @@ export default {
     windowType: {
       type: String,
       default: 'default'
+    },
+    windowName: {
+      type: String,
+      default: ''
     },
     content: {
       type: Object,
