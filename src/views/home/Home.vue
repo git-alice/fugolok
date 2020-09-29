@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       icons: [
-        {'windowName': 'My films', 'src': require("@/assets/img/computer.png")},
+        // {'windowName': 'My films', 'src': require("@/assets/img/computer.png")},
         {'windowName': 'ExDropMe', 'src': require("@/assets/img/upload.png")},
         {'windowName': 'Help', 'src': require("@/assets/img/net.png")},
         {'windowName': 'Account', 'src': require("@/assets/img/account.png")},
