@@ -13,15 +13,19 @@
         p Type a user name and password to log on to Ugolok.
         br
         .form-group.d-flex.align-items-center.justify-content-between.focused
-          label.mr-3 User name:
-          input.form-control.w-75(type='text')
+          label.mr-3 Email:
+          input.form-control.w-75(type='email', placeholder="Email", v-model="username" required)
         br
         .form-group.d-flex.align-items-center.justify-content-between.focused
           label.mr-3 Password:
-          input.form-control.w-75(type='text')
+          input.form-control.w-75(type='password' placeholder="password", v-model="password" required)
       div.buttons__section.col-2
-        button.btn.btn-sm.btn-primary.border-dark(type='button' @click="auth")
-          span.btn-text OK
+        button.btn.btn-sm.btn-primary.border-dark(type='button' @click="login")
+          span.btn-text
+            span(v-if='!loading')
+              p OK
+            span(v-if='loading')
+              img(src="https://i.gifer.com/XVo6.gif" style="display: block; margin: auto; width: 25px; height: 25px;")
         br
         button.btn.btn-sm.btn-primary(type='button')
           span.btn-text Cancel
@@ -32,14 +36,42 @@ import Window from "@/components/Elements/Window/Window";
 
 export default {
   name: 'LoginWindow',
-  props: ['initOptions', 'windowName',],
-  methods: {
-    auth(event) {
-      setTimeout(() => {this.$router.push('home')}, 500)
+  data() {
+    return {
+      password: '',
+      username: '',
+      loading: false, // loading indicator
     }
   },
   components: { Window },
-  mounted() {}
+  props: ['initOptions', 'windowName',],
+  methods: {
+    login: function () {
+      this.loading = true;
+
+      let username = this.username
+      let password = this.password
+      this.$store.dispatch('login', { username, password }  )
+          .then(() => this.$router.push('/home'))
+          .catch((err) => {
+            if (err.toJSON().message === "Network Error") {
+              this.$notify({
+                group: 'info',
+                title: 'Приложение недоступно.<hr>',
+                text: 'Попробуйте зайти позднее.',
+              });
+              this.loading = false
+            } else if (err.response.status === 422) {
+              this.$notify({
+                group: 'info',
+                title: 'Неправильный логин или пароль.<hr>',
+                text: 'Попробуйте зайти еще раз.',
+              });
+              this.loading = false
+            }
+          })
+    },
+  },
 }
 </script>
 

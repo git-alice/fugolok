@@ -1,5 +1,10 @@
 <template lang="pug">
 div(id="app", v-on:keyup.ctrl.right="testNoti")
+  // router-link(to="/home") Home
+
+  // --- Notfications ---
+  notifications(group="info" classes="notification")
+
   router-view
 
 //    <ul>
@@ -12,8 +17,42 @@ div(id="app", v-on:keyup.ctrl.right="testNoti")
 </template>
 
 <script>
+
+import Vue from './main'
+
 export default {
   name: 'App',
-  methods: {}
+  methods: {
+    logout: function () {
+      this.$store.dispatch('logout')
+          .then(function () {
+            this.$router.push('/login')
+          })
+    },
+    notifyStatus(title, text) {
+      this.$notify({
+        group: 'info',
+        title: 'Ваш токен истек.',
+        text: 'Попробуйте зайти снова!',
+      });
+    }
+  },
+  computed : {
+    isLoggedIn : function(){ return this.$store.getters.isLoggedIn}
+  },
+  /**
+   * Let's handle the case of rotten tokens
+   */
+  created() {
+    // Add a response interceptor
+    this.$http.interceptors.response.use(undefined, function (err) {
+      return new Promise((resolve, reject) => {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch("logout")
+        }
+        throw err;
+      });
+    });
+  },
 }
 </script>

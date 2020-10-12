@@ -7,6 +7,14 @@ import Notifications from 'vue-notification'
 import VueCookies from 'vue-cookies'
 import store from './store'
 import VTooltip from 'v-tooltip'
+import Axios from 'axios'
+
+// Axios -> prototype.$http
+Vue.prototype.$http = Axios;
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = token
+}
 
 // Notifications
 Vue.use(Notifications, {
@@ -51,3 +59,5 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+export default Vue;
