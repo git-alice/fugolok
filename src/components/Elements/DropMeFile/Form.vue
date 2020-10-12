@@ -19,102 +19,95 @@
 </template>
 
 <script>
-    import axios from 'axios'
+import axios from 'axios'
 
-    export default {
-        data(){
-            return {
-                dragAndDropCapable: false,
-                files: [],
-                uploadPercentage: 0
-            }
+export default {
+    data(){
+        return {
+            dragAndDropCapable: false,
+            files: [],
+            uploadPercentage: 30
+        }
+    },
+    mounted(){
+        this.dragAndDropCapable = this.determineDragAndDropCapable();
+
+        if (this.dragAndDropCapable) {
+
+            ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach( function( evt ) {
+
+                this.$refs.fileform.addEventListener(evt, function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                }.bind(this), false);
+            }.bind(this));
+
+            this.$refs.fileform.addEventListener('drop', function(e){
+                for( let i = 0; i < e.dataTransfer.files.length; i++ ){
+                    this.files.push( e.dataTransfer.files[i] );
+                    this.getImagePreviews();
+                }
+            }.bind(this));
+        }
+    },
+    methods: {
+        determineDragAndDropCapable(){
+            let div = document.createElement('div');
+
+            return ( ( 'draggable' in div )
+                || ( 'ondragstart' in div && 'ondrop' in div ) )
+                && 'FormData' in window
+                && 'FileReader' in window;
         },
+        getImagePreviews(){
+            for( let i = 0; i < this.files.length; i++ ){
+                if ( /\.(jpe?g|png|gif)$/i.test( this.files[i].name ) ) {
 
-        mounted(){
-            this.dragAndDropCapable = this.determineDragAndDropCapable();
+                    let reader = new FileReader();
 
-            if( this.dragAndDropCapable ){
-
-                ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach( function( evt ) {
-
-                    this.$refs.fileform.addEventListener(evt, function(e){
-                        e.preventDefault();
-                        e.stopPropagation();
+                    reader.addEventListener("load", function(){
+                        this.$refs['preview'+parseInt( i )][0].src = reader.result;
                     }.bind(this), false);
-                }.bind(this));
 
-                this.$refs.fileform.addEventListener('drop', function(e){
-                    for( let i = 0; i < e.dataTransfer.files.length; i++ ){
-                        this.files.push( e.dataTransfer.files[i] );
-                        this.getImagePreviews();
-                    }
-                }.bind(this));
+                    reader.readAsDataURL( this.files[i] );
+                } else {
+                    this.$nextTick(function(){
+                        this.$refs['preview'+parseInt( i )][0].src = '/images/file.png';
+                    });
+                }
             }
         },
 
-        methods: {
-            determineDragAndDropCapable(){
+        submitFiles(){
+            let formData = new FormData();
 
-                var div = document.createElement('div');
-
-                return ( ( 'draggable' in div )
-                    || ( 'ondragstart' in div && 'ondrop' in div ) )
-                    && 'FormData' in window
-                    && 'FileReader' in window;
-            },
-
-            getImagePreviews(){
-                for( let i = 0; i < this.files.length; i++ ){
-                    if ( /\.(jpe?g|png|gif)$/i.test( this.files[i].name ) ) {
-
-                        let reader = new FileReader();
-
-                        reader.addEventListener("load", function(){
-                            this.$refs['preview'+parseInt( i )][0].src = reader.result;
-                        }.bind(this), false);
-
-                        reader.readAsDataURL( this.files[i] );
-                    } else {
-                        this.$nextTick(function(){
-                            this.$refs['preview'+parseInt( i )][0].src = '/images/file.png';
-                        });
-                    }
-                }
-            },
-
-            submitFiles(){
-
-                let formData = new FormData();
-
-                for( var i = 0; i < this.files.length; i++ ){
-                    let file = this.files[i];
-
-                    formData.append('files[' + i + ']', file);
-                }
-
-                axios.post( '/file-drag-drop',
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
-                        onUploadProgress: function( progressEvent ) {
-                            this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-                        }.bind(this)
-                    }
-                ).then(function(){
-                    console.log('SUCCESS!!');
-                })
-                    .catch(function(){
-                        console.log('FAILURE!!');
-                    });
-            },
-
-            removeFile( key ){
-                this.files.splice( key, 1 );
+            for (let i = 0; i < this.files.length; i++) {
+                let file = this.files[i];
+                formData.append('files[' + i + ']', file);
             }
+
+            axios.post( '/file-drag-drop',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    onUploadProgress: function( progressEvent ) {
+                        this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+                    }.bind(this)
+                }
+            ).then(function() {
+              console.log('SUCCESS!!');
+            }).catch(function() {
+              console.log('FAILURE!!');
+            });
+        },
+
+        removeFile(key){
+            this.files.splice(key, 1);
         }
     }
+}
 </script>
 
 <style scoped>
