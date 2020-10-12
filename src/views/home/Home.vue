@@ -22,9 +22,6 @@
           ContextMenuItem(@click.native="")
             div Action 2 {{ contextData }}
 
-      // --- Notfications ---
-      notifications(group="info" classes="notification-block")
-
       // --- KeyResizing ---
       Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
       Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindowByKeys('left')")
@@ -33,7 +30,7 @@
 
       // --- TEST BUTTONS ---
       // button(@contextmenu.prevent="$refs.menu.open($event, 'Payload')") Get contextmenu
-      // button(@click="testNotification") Get notification
+      button(@click="testNotification") Get notification
 </template>
 
 <script>
@@ -91,6 +88,7 @@ export default {
         group: 'info',
         title: 'Important message',
         text: 'Hello user! This is a notification!',
+        speed: 0
       });
     },
   },
@@ -113,6 +111,7 @@ export default {
 @import "../../assets/css/input.scss";
 @import "../../assets/css/tooltip.scss";
 @import "../../assets/css/utils.scss";
+@import "../../assets/css/custom_notification.scss";
 
 @font-face {
   font-family: "PixelFont";
