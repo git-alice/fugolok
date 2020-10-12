@@ -1,5 +1,6 @@
 export default {
     state: {
+        windowsThatWeSaved: ['Account', 'ExDropMe', 'Help', 'Library'],
         openedWindows: {},
         activeWindow: ''
     },
@@ -45,41 +46,44 @@ export default {
             options.vm.$cookies.set('userConfig', updatedUserConfig)
         },
         /**
-         * Put windows options to cookies;
+         * Put windows options to cookies and state;
          */
         setCookies(context, options) {
-            let cookiesConfig = options.vm.$cookies.get('userConfig');
-            // If cookiesConfig === undefined, that is, cookiesConfig doesn't exist
-            // then set defaultConfig to cookies `userConfig` vie `setDefaultConfig` action
-            // and then get `userConfig` from cookies
-            if (!cookiesConfig) {
-                context.dispatch('setDefaultConfig', options.vm).then(() =>
-                    { cookiesConfig = options.vm.$cookies.get('userConfig'); }
-                )
-            }
+            if (context.state.windowsThatWeSaved.includes(options.windowName)) {
+                let cookiesConfig = options.vm.$cookies.get('userConfig');
+                // If cookiesConfig === undefined, that is, cookiesConfig doesn't exist
+                // then set defaultConfig to cookies `userConfig` vie `setDefaultConfig` action
+                // and then get `userConfig` from cookies
+                if (!cookiesConfig) {
+                    context.dispatch('setDefaultConfig', options.vm).then(() =>
+                        { cookiesConfig = options.vm.$cookies.get('userConfig'); }
+                    )
+                }
 
-            // TODO: Логика не очень
-            let currentCookiesWindowOptions = cookiesConfig.openedWindows[options.windowName] || {};
+                // TODO: Логика не очень
+                let currentCookiesWindowOptions = cookiesConfig.openedWindows[options.windowName] || {};
+                // If windowName exists in `openedWindows`
+                if (currentCookiesWindowOptions) {
+                    let x = options.x || currentCookiesWindowOptions.initX || 0,
+                        y = options.y || currentCookiesWindowOptions.initY || 0,
+                        w = options.w || currentCookiesWindowOptions.initWidth || 600,
+                        h = options.h || currentCookiesWindowOptions.initHeight || 500,
+                        isOpen = 'isOpen' in options ? options.isOpen : true,
+                        // Merge `currentCookiesWindowOptions` and window parameter from `options` (x, y, h, w)
+                        newWindowConfig = Object.assign(currentCookiesWindowOptions,
+                            {initX: x, initY: y, initHeight: h, initWidth: w, isOpen: isOpen}),
+                        // Merge `openedWindows` and updated window with name equal options.windowName
+                        windows = Object.assign(cookiesConfig.openedWindows, { [options.windowName]: newWindowConfig }),
+                        // Merge config from cookies and updated windows
+                        updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
 
-            // If windowName exists in `openedWindows`
-            if (currentCookiesWindowOptions) {
-                let x = options.x || currentCookiesWindowOptions.initX || 0,
-                    y = options.y || currentCookiesWindowOptions.initY || 0,
-                    w = options.w || currentCookiesWindowOptions.initWidth || 600,
-                    h = options.h || currentCookiesWindowOptions.initHeight || 500,
-                    isOpen = 'isOpen' in Object.keys(options) ? options.isOpen : true,
-                    // Merge `currentCookiesWindowOptions` and window parameter from `options` (x, y, h, w)
-                    newWindowConfig = Object.assign(currentCookiesWindowOptions,
-                        {initX: x, initY: y, initHeight: h, initWidth: w, isOpen: isOpen}),
-                    // Merge `openedWindows` and updated window with name equal options.windowName
-                    windows = Object.assign(cookiesConfig.openedWindows, { [options.windowName]: newWindowConfig }),
-                    // Merge config from cookies and updated windows
-                    updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
-
-                // Put in `userConfig`
-                options.vm.$cookies.set('userConfig', updatedUserConfig)
-                // Commit windows to the state
-                context.commit('updateOpenedWindows', windows);
+                    // Put in `userConfig`
+                    options.vm.$cookies.set('userConfig', updatedUserConfig)
+                    // Commit windows to the state
+                    context.commit('updateOpenedWindows', windows);
+                }
+            } else {
+                console.log('Это окно не сохраняется')
             }
         },
         /**
@@ -98,7 +102,7 @@ export default {
          * Delete window from cookies and state
          */
         deleteWindow(context, options) {
-            let windows = Object.assign({}, context.state.windows)
+            let windows = Object.assign({}, context.state.openedWindows) // copy state.openedWindows
             if (options.windowName in windows) delete windows[options.windowName];
 
             let cookiesConfig = options.vm.$cookies.get('userConfig');
@@ -128,6 +132,7 @@ export default {
 
             // If window already exist
             if (options.windowName in windows) {
+                context.dispatch('setActiveWindow', options.windowName);
                 context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
             } else {
                 let updatedWindows = Object.assign(
