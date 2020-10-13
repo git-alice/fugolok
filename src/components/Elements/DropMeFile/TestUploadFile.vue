@@ -29,11 +29,6 @@ export default {
       this.files = this.$refs.files.files
     },
     submitFile() {
-      this.$notify({
-        group: 'info',
-        title: 'Отправляем... <img src="https://i.gifer.com/XVo6.gif" style="display: block; margin: auto; width: 25px; height: 25px;">',
-        duration: -1
-      });
       const formData = new FormData();
 
       const json = JSON.stringify({title: this.title, description: this. description});
@@ -43,10 +38,14 @@ export default {
       formData.append("json_payload", blob);
 
       if (this.files !== '') {
-        for ( let i = 0; i < this.files.length; i++ ){
+        for ( let i = 0; i < this.files.length; i++ ) {
           let file = this.files[i];
           formData.append('files', file);
         }
+        this.$notify({
+          group: 'info',
+          title: 'Отправляем... <img src="https://i.gifer.com/XVo6.gif" style="display: block; margin: auto; width: 25px; height: 25px;">',
+        });
         this.$http.post( 'http://192.168.0.98:8000/api/v1/films/',
             formData,
             {
@@ -69,6 +68,12 @@ export default {
             title: 'Не отправлено ;(',
             text: 'Что то пошло не так, попробуйте еще раз.',
           });
+        }).finally(() => {
+        });
+      } else {
+        this.$notify({
+          group: 'info',
+          text: 'Вы не выбрали ни одного файла.',
         });
       }
     }
