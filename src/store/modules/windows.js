@@ -1,3 +1,5 @@
+import getRandomInt from "@/utils/random";
+
 export default {
     state: {
         windowsThatWeSaved: ['Account', 'ExDropMe', 'Help', 'Library'],
@@ -6,7 +8,7 @@ export default {
     },
     actions: {
         /**
-         * Set default config with help window and put in into cookies.
+         * Set default config with help window and put in into local_storage.
          * Default config usually applied on the first login or something get wrong.
          */
         setDefaultConfig(context, vm) {
@@ -30,14 +32,14 @@ export default {
             vm.$cookies.set('userConfig', defaultConfig)
         },
         /**
-         * Update windows in the config and cookies;
+         * Update windows in the config and local_storage;
          * Where: options.window -> Object with windows properties;
          *        options.vm -> `this`, that is, Vue object.
          */
         updateWindowsConfig(context, options) {
             // options.windows -> object with window's properties
             let windows = options.windows;
-            // Get `userConfig` from cookies
+            // Get `userConfig` from local_storage
             let cookiesConfig = options.vm.$cookies.get('userConfig');
             // Merge cookiesConfig={openedWindows: {...}, ...} and {openedWindows: windows}
             let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
@@ -46,14 +48,14 @@ export default {
             options.vm.$cookies.set('userConfig', updatedUserConfig)
         },
         /**
-         * Put windows options to cookies and state;
+         * Put windows options to local_storage and state;
          */
         setCookies(context, options) {
             if (context.state.windowsThatWeSaved.includes(options.windowName)) {
                 let cookiesConfig = options.vm.$cookies.get('userConfig');
                 // If cookiesConfig === undefined, that is, cookiesConfig doesn't exist
-                // then set defaultConfig to cookies `userConfig` vie `setDefaultConfig` action
-                // and then get `userConfig` from cookies
+                // then set defaultConfig to local_storage `userConfig` vie `setDefaultConfig` action
+                // and then get `userConfig` from local_storage
                 if (!cookiesConfig) {
                     context.dispatch('setDefaultConfig', options.vm).then(() =>
                         { cookiesConfig = options.vm.$cookies.get('userConfig'); }
@@ -74,7 +76,7 @@ export default {
                             {initX: x, initY: y, initHeight: h, initWidth: w, isOpen: isOpen}),
                         // Merge `openedWindows` and updated window with name equal options.windowName
                         windows = Object.assign(cookiesConfig.openedWindows, { [options.windowName]: newWindowConfig }),
-                        // Merge config from cookies and updated windows
+                        // Merge config from local_storage and updated windows
                         updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
 
                     // Put in `userConfig`
@@ -87,10 +89,10 @@ export default {
             }
         },
         /**
-         * Load windows from cookies and put to state
+         * Load windows from local_storage and put to state
          */
         loadCookieWindows(context, vm) {
-            // userConfig = cookies userConfig if exist or defaultConfig in other case
+            // userConfig = local_storage userConfig if exist or defaultConfig in other case
             let userConfig = vm.$cookies.get('userConfig');
             if (!userConfig) context.dispatch('setDefaultConfig', vm);
             let windows = userConfig.openedWindows;
@@ -99,7 +101,7 @@ export default {
             context.commit('updateOpenedWindows', windows);
         },
         /**
-         * Delete window from cookies and state
+         * Delete window from local_storage and state
          */
         deleteWindow(context, options) {
             let windows = Object.assign({}, context.state.openedWindows) // copy state.openedWindows
@@ -112,23 +114,27 @@ export default {
             context.commit('updateOpenedWindows', windows);
         },
         /**
-         * Delete all window from cookies and state
+         * Delete all window from local_storage and state
          */
         deleteAllWindows(context, vm) {
             // Zero
             let cookiesConfig = vm.$cookies.get('userConfig');
             cookiesConfig.openedWindows = {} // обнуление
 
-            // Update cookies and state
+            // Update local_storage and state
             vm.$cookies.set('userConfig', cookiesConfig)
             context.commit('updateOpenedWindows', cookiesConfig.openedWindows);
 
         },
         /**
-         * Append window to cookies and state
+         * Append window to local_storage and state
          */
         appendWindow(context, options) {
             let windows = context.state.openedWindows;
+            let initHeight = options.heightWindow ? options.heightWindow : window.innerHeight / 2
+            let initWidth = options.widthWindow ? options.widthWindow : window.innerWidth / 2
+            let initY = options.yWindow ? options.yWindow : (window.innerHeight -  initHeight ) / 2 + getRandomInt(100)
+            let initX = options.xWindow ? options.xWindow : (window.innerWidth - initWidth) / 2 + getRandomInt(100)
 
             // If window already exist
             if (options.windowName in windows) {
@@ -136,10 +142,10 @@ export default {
                 context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
             } else {
                 let updatedWindows = Object.assign(
-                    {[options.windowName]: {initX: 0,initY: 0, initHeight: 300, initWidth: 300, isOpen: true}},
+                    {[options.windowName]: {initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src}},
                     windows)
 
-                // Update cookies and state
+                // Update local_storage and state
                 context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
                 context.commit('updateOpenedWindows', updatedWindows)
             }
@@ -171,6 +177,9 @@ export default {
         },
         activeWindow(state) {
             return state.activeWindow
+        },
+        windowByName(state) {
+            return windowName => state.openedWindows[windowName]
         }
     },
 }

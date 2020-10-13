@@ -4,9 +4,9 @@
       Start(@click="")
 
       // Left status bar | Opened windows
-      button.task__button(v-for="(v, k, i) in getAllWindows()")
-        // img(src="@/assets/desktop_icons/account.png")
-        p Window {{ k }}
+      button.task__button(v-for="(value, key, i) in getAllWindows()" @click="onRollWindow($event, key)")
+        img(:src="value.src" height="17px" width="17px")
+        p Window {{ key }}
 
       // Right status bar
       button.task__button(@click="closeAllWindows" style="margin-left: auto;") C.A.
@@ -46,7 +46,17 @@ export default {
       },
       closeAllWindows(event) {
         this.$store.dispatch('deleteAllWindows', this);
-      }
+      },
+      onRollWindow(event, windowName) {
+        console.log(this.$store.getters.windowByName(windowName))
+        if (this.$store.getters.windowByName(windowName).isOpen) {
+          console.log('Закрыл');
+          this.$store.dispatch('setCookies', {windowName: windowName, isOpen: false, vm: this})
+        } else {
+          console.log('Открыл');
+          this.$store.dispatch('setCookies', {windowName: windowName, isOpen: true, vm: this})
+        }
+      },
     }
 }
 </script>
@@ -72,5 +82,10 @@ $bg: #149091;
     height: 26px;
     background: $g2;
     border: outset 2px;
+  button {
+    p {
+      margin-left: 5px;
+    }
+  }
 }
 </style>
