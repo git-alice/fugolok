@@ -1,18 +1,36 @@
 <template lang="pug">
-  div(class="icon", @click="openWindow")
-    img(:src="hrefIcon")
-    div {{ windowName }}
+  vue-draggable-resizable(
+    :w="43",
+    :h="43",
+    :x="x",
+    :y="y"
+    :resizable="false",
+    :grid=[20,20],
+    @activated="onActivated",
+    @deactivated="onDeactivated"
+  )
+    div(class="icon", @dblclick="openWindow")
+      img(:src="src")
+      div(v-bind:class="{'active': isActive}") {{ windowName }}
 </template>
 
 <script>
 export default {
   name: "Icon",
-  data() { return {} },
-  props: ['hrefIcon', 'windowName'],
+  data() { return {
+    isActive: false
+  } },
+  props: ['src', 'windowName', 'x', 'y', 'xWindow', 'yWindow', 'hWindow', 'wWindow'],
   methods: {
+    onActivated() {
+      this.isActive = true
+    },
+    onDeactivated() {
+      this.isActive = false
+    },
     openWindow() {
       // Add window to store
-      this.$store.dispatch('appendWindow', {windowName: this.windowName, vm: this})
+      this.$store.dispatch('appendWindow', {windowName: this.windowName, src: this.src, vm: this})
     }
   }
 }
@@ -30,6 +48,9 @@ export default {
   img {
     width: 60px;
     padding: 10px;
+  }
+  .active {
+    border: 1px dotted black;
   }
 }
 

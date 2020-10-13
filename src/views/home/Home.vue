@@ -7,9 +7,12 @@
             div {{ name }}
             div {{ value }}
 
+
       // --- All Icons ---
+      // div(v-for="icon in icons")
+        // Icon(:href-icon="icon.src", :window-name="icon.windowName")
       div(v-for="icon in icons")
-        Icon(:href-icon="icon.src", :window-name="icon.windowName")
+        component(:is="icon.component" :window-name="icon.window.name" :src="icon.src" :x="icon.x" :y="icon.y") // :window-name="icon.window.$options.name"
 
       // --- Taskbar ---
       Taskbar
@@ -30,7 +33,7 @@
 
       // --- TEST BUTTONS ---
       // button(@contextmenu.prevent="$refs.menu.open($event, 'Payload')") Get contextmenu
-      button(@click="testNotification") Get notification
+      // button(@click="testNotification") Get notification
 </template>
 
 <script>
@@ -46,17 +49,13 @@ import Icon from "../../components/Elements/Icon/Icon"
 import ContextMenu from "@/components/Elements/ContextMenu/ContextMenu";
 import ContextMenuItem from "@/components/Elements/ContextMenu/ContextMenuItem";
 
+import icons from "@/business_logic/icons";
+
 export default {
   name: 'Home',
   data() {
     return {
-      icons: [
-        // {'windowName': 'My films', 'src': require("@/assets/img/computer.png")},
-        {'windowName': 'ExDropMe', 'src': require("@/assets/img/upload.png")},
-        {'windowName': 'Help', 'src': require("@/assets/img/net.png")},
-        {'windowName': 'Account', 'src': require("@/assets/img/account.png")},
-        {'windowName': 'Library', 'src': require("@/assets/img/folder.png")}
-      ],
+      icons: icons
     }
   },
   components: {
