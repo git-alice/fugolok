@@ -27,8 +27,10 @@
 //
 
 .dotted__box {
-  border: 1px dotted white;
   position: absolute; z-index: 5;
+  height: 100%;
+  width: 100%;
+  border: 1px dotted white;
 }
 
 .window-rolling {

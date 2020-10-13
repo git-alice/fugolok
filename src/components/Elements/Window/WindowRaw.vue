@@ -33,13 +33,15 @@
           img(:src="require(\"@/assets/img/resize_icon.png\")")
         .inner
             header.bar.drag-handle(:class="{ 'bar-active' : active}")
+              div.d-flex.flex-row.align-items-center
+                img(:src="iconSrc" width="18px" height="18px")
                 h1 {{ (content.title) ? content.title : windowName}}
-                .buttons(v-if="windowType=='default'")
-                    a.minimize(v-on:click="rollWindow")
-                    a.maximize(v-on:click="maximizeWindow")
-                    a.close(v-on:click="closeWindow")
-                .buttons(v-else-if="windowType=='info'")
-                    a.help(v-tooltip="{content: content.infoTooltip, trigger: 'hover'}")
+              .buttons(v-if="windowType=='default'")
+                  a.minimize(v-on:click="rollWindow")
+                  a.maximize(v-on:click="maximizeWindow")
+                  a.close(v-on:click="closeWindow")
+              .buttons(v-else-if="windowType=='info'")
+                  a.help(v-tooltip="{content: content.infoTooltip, trigger: 'hover'}")
             nav.menu
               br
             .window__container
@@ -51,6 +53,7 @@
                         .content__status
                             .status__type
                               span [X={{ xDisplay }}] [Y={{ yDisplay }}] [Z={{ zDisplay }}]
+
 </template>
 
 <script>
@@ -84,6 +87,10 @@ export default {
     windowName: {
       type: String,
       default: ''
+    },
+    iconSrc: {
+      type: String,
+      default: require('@/assets/img/new_folder_2.png')
     },
     content: {
       type: Object,
@@ -144,7 +151,7 @@ export default {
     maximizeWindow() {
       let taskbarHeight = 26, // TODO: Move to config
           h = window.innerHeight - taskbarHeight, w = window.innerWidth,
-          x = -20, y = -20;
+          x = -0, y = -0;
 
       if (this.maximized) {
         let hInit = 370, wInit = 570;
@@ -174,8 +181,8 @@ export default {
           h = window.innerHeight - taskbarHeight, w = window.innerWidth / 2,
           x = null, y = null;
 
-      if (resizeType === 'left') { x = -20; y = -20; }
-      else if (resizeType === 'right') { x = w - 20; y = -20; }
+      if (resizeType === 'left') { x = -0; y = -0; }
+      else if (resizeType === 'right') { x = w - 0; y = -0; }
 
       this.$refs.window.changeWidth(w);
       this.$refs.window.changeHeight(h);
@@ -204,8 +211,8 @@ export default {
       let draggingWindow = this.$refs.window.$el
       let dottedBox = this.$refs.dottedBox;
       this.dragging = true;
-      dottedBox.style.left = (x + 20) + 'px';
-      dottedBox.style.top = (y + 20) + 'px';
+      dottedBox.style.left = (x + 0) + 'px';
+      dottedBox.style.top = (y + 0) + 'px';
       dottedBox.style.width = draggingWindow.style.width;
       dottedBox.style.height = draggingWindow.style.height;
     },
@@ -232,10 +239,19 @@ export default {
       dottedBox.style.height = height + 'px';
     },
     /**
+     * On resize start callback
+     */
+    onResizeStart() {
+
+    },
+    /**
      * On resize stop callback
      */
     onResizingStop(left, top, width, height) {
+      let dottedBox = this.$refs.dottedBox;
       this.dragging = false;
+      dottedBox.style.width = width + 'px';
+      dottedBox.style.height = height + 'px';
       this.$emit('onResizingStop', width, height)
     },
 
@@ -282,8 +298,8 @@ export default {
     let dottedBox = this.$refs.dottedBox;
     dottedBox.style.width = this.initializeWidth() + 'px';
     dottedBox.style.height = this.initializeHeight() + 'px';
-    dottedBox.style.left = (x + 20) + 'px';
-    dottedBox.style.top = (y + 20) + 'px';
+    dottedBox.style.left = (x + 0) + 'px';
+    dottedBox.style.top = (y + 0) + 'px';
   },
   created() {}
 }

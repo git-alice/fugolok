@@ -57,7 +57,9 @@ body {
   background-repeat: repeat;
   background-position: center center;
   background-color: $bg;
-  padding: 12px;
+  // padding: 12px;
+  margin: 0;
+  padding: 0;
   color: $bl;
   font-family: PixelFont, Tahoma, Helvetica, Arial, sans-serif;
   font-size: 11px;
@@ -133,7 +135,7 @@ img {
     align-items: center;
     align-content: center;
     justify-content: space-between;
-    height: 18px;
+    height: 20px; // 18px
     padding: 2px;
     background: $g3;
     color: $wh;
