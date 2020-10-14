@@ -2,8 +2,10 @@ import Icon from "@/components/Elements/Icon/Icon";
 
 import Account from "@/components/Windows/Account";
 import Help from "@/components/Windows/Help";
-import ExDropMe from "@/components/Windows/ExDropMe";
+import ExDropMe from "@/components/Windows/SimpleFilm";
 import Library from "@/components/Windows/Library";
+import DragAndDropFilm from "@/components/Windows/DragAndDropFilm";
+
 
 let yFirst = 10
 let xFirst = 10
@@ -29,7 +31,12 @@ let icons = [
         component: Icon,
         window: Library,
         src: require("@/assets/img/folder.png")
-    }
+    },
+    {
+        component: Icon,
+        window: DragAndDropFilm,
+        src: require("@/assets/img/upload.png")
+    },
 ]
 
 for(let i=0; i < icons.length; i++) {

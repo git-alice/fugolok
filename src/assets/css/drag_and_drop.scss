@@ -1,0 +1,149 @@
+form{
+  display: block;
+  height: 200px;
+  width: 400px;
+  background: #ccc;
+  text-align: center;
+  line-height: 200px;
+  box-shadow: inset -1px -1px 0 0 black, inset 1px 1px 0 0 #ddd;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.general__info {
+  width: 400px;
+  height: 200px;
+  margin: auto;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.general__info label {
+  display: inline-block;
+  min-width: 60px;
+}
+
+.general__info input, .submit__group {
+  margin: 6px 0;
+}
+
+.wrap__text {
+  position: absolute;
+  margin-top: -16px;
+  padding: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+  background: #C0C0C0;
+}
+
+.files {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  //border-left: 1px solid white;
+  &:after {
+    content: "";
+    flex: auto;
+  }
+}
+
+.no__files {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.file__listing {
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  position: relative;
+  //border: 1px dotted white;
+  box-shadow: inset -1px -1px 0 0 #888, inset 1px 1px 0 0 white;
+  background: #C0C0C0;
+  padding: 3px;
+  /*border-bottom: 1px solid #ddd;*/
+
+  & .remove {
+    position: absolute;
+    left: calc(100% - (14px + 3px));
+    width: 14px;
+    height: 14px;
+
+    &:before, &:after {
+      transform-origin: center center;
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -4px;
+      margin-left: -1px;
+      width: 2px;
+      height: 8px;
+      background: black;
+      cursor: pointer;
+    }
+
+    &:before {
+      transform: rotateZ(-45deg);
+    }
+
+    &:after {
+      transform: rotateZ(45deg);
+    }
+  }
+
+  & img{
+    margin-top: 10px;
+    height: 100px;
+  }
+}
+
+.file__listing ol {
+  list-style-type: lower-greek;
+}
+.file__listing ul {
+  list-style-type: square;
+}
+
+.file__listing ul li {
+  margin-bottom: 10px;
+}
+
+
+
+.file__listing .img__info {
+  padding: 10px;
+}
+
+.files__size {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
+div.remove-container{
+  text-align: center;
+}
+
+div.remove-container a{
+  color: red;
+  cursor: pointer;
+}
+
+.submit__button {
+  text-align: center;
+  color: white;
+  //font-weight: bold;
+  background-color: #000181;
+}
+
+progress {
+  width: 400px;
+  margin: auto;
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

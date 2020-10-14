@@ -1,6 +1,5 @@
 <template lang="pug">
   Window(:initOptions="initOptions" :window-name="this.$options.name")
-    //DropMeFileForm
     TestUploadFile
 </template>
 
@@ -10,12 +9,12 @@ import DropMeFileForm from '@/components/Elements/DropMeFile/Form'
 import TestUploadFile from "@/components/Elements/DropMeFile/TestUploadFile";
 
 export default {
-  name: 'ExDropMe',
+  name: 'SimpleFilm',
   props: ['initOptions'],
   mounted() {},
   methods: {},
   components: {
-        Window, DropMeFileForm, TestUploadFile
+        Window, TestUploadFile
     }
 }
 </script>
