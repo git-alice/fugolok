@@ -7,10 +7,7 @@
             div {{ name }}
             div {{ value }}
 
-
       // --- All Icons ---
-      // div(v-for="icon in icons")
-        // Icon(:href-icon="icon.src", :window-name="icon.windowName")
       div(v-for="icon in icons")
         component(:is="icon.component" :window-name="icon.window.name" :src="icon.src" :x="icon.x" :y="icon.y") // :window-name="icon.window.$options.name"
 
@@ -26,10 +23,10 @@
             div Action 2 {{ contextData }}
 
       // --- KeyResizing ---
-      Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
-      Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindowByKeys('left')")
-      Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindowByKeys('full')")
-      Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindowByKeys('mini')")
+      // Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
+      // Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindowByKeys('left')")
+      // Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindowByKeys('full')")
+      // Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindowByKeys('mini')")
 
       // --- TEST BUTTONS ---
       // button(@contextmenu.prevent="$refs.menu.open($event, 'Payload')") Get contextmenu
@@ -38,9 +35,10 @@
 
 <script>
 import Help from "@/components/Windows/Help";
-import ExDropMe from '../../components/Windows/ExDropMe'
+import SimpleFilm from '../../components/Windows/SimpleFilm'
 import Account from "@/components/Windows/Account";
 import Library from "@/components/Windows/Library";
+import DragAndDropFilm from "@/components/Windows/DragAndDropFilm";
 
 import Taskbar from '../../components/Taskbar/Taskbar'
 import Button from "../../components/Elements/Button/Button";
@@ -59,7 +57,7 @@ export default {
     }
   },
   components: {
-    Library, ExDropMe, Account, Help, Taskbar, Button, Icon, ContextMenu, ContextMenuItem, Keypress: () => import('vue-keypress')
+    Library, SimpleFilm, DragAndDropFilm, Account, Help, Taskbar, Button, Icon, ContextMenu, ContextMenuItem, Keypress: () => import('vue-keypress')
   },
   methods: {
     /**

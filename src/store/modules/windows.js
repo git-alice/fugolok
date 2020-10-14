@@ -1,8 +1,11 @@
 import getRandomInt from "@/utils/random";
+import { windowNamesThatWeSaved } from "@/business_logic/windows"
+
+console.log('windowNamesThatWeSaved', windowNamesThatWeSaved)
 
 export default {
     state: {
-        windowsThatWeSaved: ['Account', 'ExDropMe', 'Help', 'Library'],
+        windowNamesThatWeSaved: windowNamesThatWeSaved,
         openedWindows: {},
         activeWindow: ''
     },
@@ -51,7 +54,7 @@ export default {
          * Put windows options to local_storage and state;
          */
         setCookies(context, options) {
-            if (context.state.windowsThatWeSaved.includes(options.windowName)) {
+            if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
                 let cookiesConfig = options.vm.$cookies.get('userConfig');
                 // If cookiesConfig === undefined, that is, cookiesConfig doesn't exist
                 // then set defaultConfig to local_storage `userConfig` vie `setDefaultConfig` action
@@ -130,24 +133,26 @@ export default {
          * Append window to local_storage and state
          */
         appendWindow(context, options) {
-            let windows = context.state.openedWindows;
-            let initHeight = options.heightWindow ? options.heightWindow : window.innerHeight / 2
-            let initWidth = options.widthWindow ? options.widthWindow : window.innerWidth / 2
-            let initY = options.yWindow ? options.yWindow : (window.innerHeight -  initHeight ) / 2 + getRandomInt(100)
-            let initX = options.xWindow ? options.xWindow : (window.innerWidth - initWidth) / 2 + getRandomInt(100)
+            if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
+                let windows = context.state.openedWindows;
+                let initHeight = options.heightWindow ? options.heightWindow : window.innerHeight / 2
+                let initWidth = options.widthWindow ? options.widthWindow : window.innerWidth / 2
+                let initY = options.yWindow ? options.yWindow : (window.innerHeight -  initHeight ) / 2 + getRandomInt(100)
+                let initX = options.xWindow ? options.xWindow : (window.innerWidth - initWidth) / 2 + getRandomInt(100)
 
-            // If window already exist
-            if (options.windowName in windows) {
-                context.dispatch('setActiveWindow', options.windowName);
-                context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
-            } else {
-                let updatedWindows = Object.assign(
-                    {[options.windowName]: {initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src}},
-                    windows)
+                // If window already exist
+                if (options.windowName in windows) {
+                    context.dispatch('setActiveWindow', options.windowName);
+                    context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
+                } else {
+                    let updatedWindows = Object.assign(
+                        {[options.windowName]: {initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src}},
+                        windows)
 
-                // Update local_storage and state
-                context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
-                context.commit('updateOpenedWindows', updatedWindows)
+                    // Update local_storage and state
+                    context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
+                    context.commit('updateOpenedWindows', updatedWindows)
+                }
             }
         },
         /**
