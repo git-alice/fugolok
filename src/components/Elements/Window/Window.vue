@@ -47,11 +47,7 @@ export default {
         this.$store.dispatch('setCookies', {windowName: this.windowName, isOpen: false, vm: this})
       },
       onMaximizeWindow(x, y, w, h) {
-        console.log('ON MAXIMIZE WINDOW');
-        // console.log(this.windowName);
-
         let options = {windowName: this.windowName, w: w, h: h, x: x, y: y, vm: this};
-        // console.log(options)
         this.$store.dispatch('setCookies', options)
       },
       onSplitWindow(x, y, w, h) {

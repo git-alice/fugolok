@@ -23,10 +23,10 @@
             div Action 2 {{ contextData }}
 
       // --- KeyResizing ---
-      // Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
-      // Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindowByKeys('left')")
-      // Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindowByKeys('full')")
-      // Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindowByKeys('mini')")
+      Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
+      Keypress(key-event="keyup" :key-code="37" :modifiers="['ctrlKey']" @success="splitWindowByKeys('left')")
+      Keypress(key-event="keyup" :key-code="38" :modifiers="['ctrlKey']" @success="splitWindowByKeys('full')")
+      Keypress(key-event="keyup" :key-code="40" :modifiers="['ctrlKey']" @success="splitWindowByKeys('mini')")
 
       // --- TEST BUTTONS ---
       // button(@contextmenu.prevent="$refs.menu.open($event, 'Payload')") Get contextmenu

@@ -72,12 +72,11 @@ export default {
           }.bind(this));
           // Add our behavior
           this.$refs.fileform.addEventListener('drop', function(e){
-              let existedFiles = this.files.map((fileObj) => fileObj.file)
+              // TODO: check if file already exist, for example:
+              // let existedFiles = this.files.map((fileObj) => fileObj.file)
               for( let i = 0; i < e.dataTransfer.files.length; i++ ){
-                if (!existedFiles.includes(e.dataTransfer.files[i].file)) {
                   this.files.push( e.dataTransfer.files[i] );
                   this.getImagePreviews();
-                }
               }
           }.bind(this));
       }

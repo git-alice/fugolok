@@ -124,8 +124,6 @@ export default {
      */
     rollWindow() {
       let dottedBox = this.$refs.dottedBox;
-      console.log('rolling')
-      console.log(dottedBox.style.width)
       this.rolling = true;
 
       setTimeout(() => {
@@ -181,6 +179,8 @@ export default {
           h = window.innerHeight - taskbarHeight, w = window.innerWidth / 2,
           x = null, y = null;
 
+      let dottedBox = this.$refs.dottedBox;
+
       if (resizeType === 'left') { x = -0; y = -0; }
       else if (resizeType === 'right') { x = w - 0; y = -0; }
 
@@ -188,6 +188,11 @@ export default {
       this.$refs.window.changeHeight(h);
       this.$refs.window.moveVertically(y);
       this.$refs.window.moveHorizontally(x);
+
+      dottedBox.style.left = x + 'px';
+      dottedBox.style.top = y + 'px';
+      dottedBox.style.width = w;
+      dottedBox.style.height = h;
 
       this.$emit('splitWindow', x, y, w, h)
     },
@@ -220,7 +225,6 @@ export default {
      * On drag stop callback
      */
     onDragStop(x, y) {
-      console.log('onDragStop')
       this.dragging = false;
       let dottedBox = this.$refs.dottedBox;
       // dottedBox.style.width = 0;
