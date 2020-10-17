@@ -4,12 +4,20 @@ import store from './store'
 
 import Home from "@/views/home/Home";
 import Login from "@/views/auth/Login";
+import Land from "@/views/land/Land";
 
 Vue.use(VueRouter)
 
 let router = new VueRouter({
     mode: 'history',
     routes: [
+        {
+            path: '/main',
+            component: Land,
+            meta: {
+                requiresAuth: false
+            }
+        },
         {
             path: '/home',
             component: Home,
