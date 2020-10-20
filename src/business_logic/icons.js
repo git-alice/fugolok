@@ -5,7 +5,7 @@ import Help from "@/components/Windows/Help";
 import ExDropMe from "@/components/Windows/SimpleFilm";
 import Library from "@/components/Windows/Library";
 import DragAndDropFilm from "@/components/Windows/DragAndDropFilm";
-
+import Radio from "@/components/Windows/Radio";
 
 let yFirst = 10
 let xFirst = 10
@@ -36,6 +36,11 @@ let icons = [
         component: Icon,
         window: DragAndDropFilm,
         src: require("@/assets/img/upload.png")
+    },
+    {
+        component: Icon,
+        window: Radio,
+        src: require("@/assets/img/Volume Dialog.png")
     },
 ]
 

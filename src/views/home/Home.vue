@@ -39,6 +39,7 @@ import SimpleFilm from '../../components/Windows/SimpleFilm'
 import Account from "@/components/Windows/Account";
 import Library from "@/components/Windows/Library";
 import DragAndDropFilm from "@/components/Windows/DragAndDropFilm";
+import Radio from "@/components/Windows/Radio";
 
 import Taskbar from '../../components/Taskbar/Taskbar'
 import Button from "../../components/Elements/Button/Button";
@@ -57,7 +58,8 @@ export default {
     }
   },
   components: {
-    Library, SimpleFilm, DragAndDropFilm, Account, Help, Taskbar, Button, Icon, ContextMenu, ContextMenuItem, Keypress: () => import('vue-keypress')
+    Library, SimpleFilm, DragAndDropFilm, Account, Help, Radio,
+    Taskbar, Button, Icon, ContextMenu, ContextMenuItem, Keypress: () => import('vue-keypress')
   },
   methods: {
     /**

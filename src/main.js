@@ -8,6 +8,9 @@ import VueCookies from 'vue-cookies'
 import store from './store'
 import VTooltip from 'v-tooltip'
 import Axios from 'axios'
+import AudioVisual from 'vue-audio-visual'
+
+Vue.use(AudioVisual)
 
 // Axios -> prototype.$http
 Vue.prototype.$http = Axios;
