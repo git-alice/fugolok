@@ -146,8 +146,10 @@ export default {
                     context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
                 } else {
                     let updatedWindows = Object.assign(
+                        {},
+                        windows,
                         {[options.windowName]: {initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src}},
-                        windows)
+                    )
 
                     // Update local_storage and state
                     context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
