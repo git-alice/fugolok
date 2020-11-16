@@ -4,6 +4,7 @@
       <input type="text" v-model="title" value="Some title $342" placeholder="title">
       <input type="text" v-model="description" value="Some description $342" placeholder="description">
       <hr>
+      [{{ uploadPercentage }}]
       <label>File
         <input type="file" id="files" ref="files" multiple v-on:change="handleFileUpload()"/>
       </label>
@@ -21,7 +22,8 @@ export default {
     return {
       files: '',
       title: '',
-      description: ''
+      description: '',
+      uploadPercentage: 0
     }
   },
   methods: {
@@ -51,7 +53,11 @@ export default {
             {
               headers: {
                 'Content-Type': 'multipart/form-data'
-              }
+              },
+              onUploadProgress: function( progressEvent ) {
+                console.log(this)
+                this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+              }.bind(this)
             }
         ).then(() => {
           this.$notify({
@@ -69,6 +75,7 @@ export default {
             text: 'Что то пошло не так, попробуйте еще раз.',
           });
         }).finally(() => {
+          this.uploadPercentage = 0
         });
       } else {
         this.$notify({

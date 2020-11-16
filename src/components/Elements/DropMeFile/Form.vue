@@ -1,13 +1,13 @@
 <template lang="pug">
   div.d-flex.flex-column.p-0.m-0.w-100.h-100
-      div.d-flex.justify-content-center
+      fieldset.d-flex.justify-content-center.p-0
         div.drag_and_drop.row
-          .col-md
-            form(ref='fileform')
+          .col-md.d-flex.justify-content-center
+            form.m-2(ref='fileform')
               span.drop-files Drop the files here!
           .col-md(style="min-width: 400px;")
-            div.general__info
-              h4.wrap__text Here you can upload film to the server!
+            fieldset.m-2
+              legend General info
               p To upload files, drag them to this area. You will see the uploaded photos below.
               div(v-show='files.length > 0')
                 hr
@@ -18,7 +18,7 @@
                 textarea(rows="3" cols="20" id="film__description" v-model="description" value="Some description $342" placeholder="Description")
                 br
                 div.submit__group.d-flex.justify-content-end
-                  button.submit__button(v-on:click='submitFiles()') Submit film
+                  button.submit__button(v-on:click='submitFiles') Submit film
         // progress(max='100' :value.prop='uploadPercentage')
       div.flex-wrap
         div.files.mt-3.mb-3(v-if="files.length > 0")
@@ -116,6 +116,8 @@ export default {
       return humanFileSize(size)
     },
     submitFiles(){
+        console.log('Init')
+
         let formData = new FormData();
 
         for (let i = 0; i < this.files.length; i++) {
@@ -123,7 +125,7 @@ export default {
             formData.append('files[' + i + ']', file);
         }
 
-        axios.post( '/file-drag-drop',
+        axios.post( 'http://192.168.0.98:8000/api/v1/films/',
             formData,
             {
                 headers: {
@@ -133,10 +135,20 @@ export default {
                     this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
                 }.bind(this)
             }
-        ).then(function() {
-          console.log('SUCCESS!!');
-        }).catch(function() {
-          console.log('FAILURE!!');
+        ).then(() => {
+          // this.$notify({
+          //   group: 'info',
+          //   title: 'Success<hr>',
+          //   text: 'Good.',
+          // });
+          console.log('success')
+        }).catch(() => {
+          // this.$notify({
+          //   group: 'info',
+          //   title: 'Failure<hr>',
+          //   text: 'Bad.',
+          // });
+          console.log('err')
         });
     },
 
