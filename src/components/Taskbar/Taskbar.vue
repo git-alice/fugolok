@@ -4,7 +4,7 @@
       Start(@click="")
 
       // Left status bar | Opened windows
-      button.task__button(v-for="(value, key, i) in getAllWindows()" @click="onRollWindow($event, key)")
+      button.task__button(v-for="(value, key, i) in getAllWindows()" @click="onRollWindow($event, key)" :class="value.isOpen ? 'active': ''")
         img(:src="value.src" height="17px" width="17px")
         p Window {{ key }}
 
@@ -79,12 +79,17 @@ $bg: #149091;
     bottom: 0px;
     left: 0px;
     right:0px;
-    height: 26px;
+    height: 28px;
     background: $g2;
     border: outset 2px;
   button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
     p {
-      margin-left: 5px;
+      margin-left: 0.3rem;
     }
   }
 }
