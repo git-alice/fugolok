@@ -15,8 +15,18 @@ import Button from "@/components/Elements/Button/Button";
 
 export default {
   name: 'Account',
+  data() {
+    return {
+    }
+  },
   props: ['initOptions'],
   components: { Button, Window },
+  computed: {
+    user() {
+      this.$store.dispatch('fetchMe')
+      return this.$store.getters.me;
+    }
+  },
   methods: {
     logout: function () {
       this.$store.dispatch('logout')
