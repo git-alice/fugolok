@@ -7,7 +7,6 @@ form{
   line-height: 200px;
   box-shadow: inset -1px -1px 0 0 black, inset 1px 1px 0 0 #ddd;
   margin: auto;
-  margin-bottom: 20px;
 }
 .general__info {
   width: 400px;
@@ -70,80 +69,83 @@ form{
     left: calc(100% - (14px + 3px));
     width: 14px;
     height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    padding: 0;
 
-    &:before, &:after {
-      transform-origin: center center;
-      content: "";
-      display: block;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-top: -4px;
-      margin-left: -1px;
-      width: 2px;
-      height: 8px;
-      background: black;
-      cursor: pointer;
-    }
+&:before, &:after {
+  transform-origin: center center;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -4px;
+  margin-left: -1px;
+  width: 2px;
+  height: 8px;
+  background: black;
+  cursor: pointer;
+}
 
-    &:before {
-      transform: rotateZ(-45deg);
-    }
+&:before {
+  transform: rotateZ(-45deg);
+}
 
-    &:after {
-      transform: rotateZ(45deg);
-    }
-  }
+&:after {
+  transform: rotateZ(45deg);
+}
+}
 
-  & img{
-    margin-top: 10px;
-    height: 100px;
-  }
+& img{
+margin-top: 10px;
+height: 100px;
+}
 }
 
 .file__listing ol {
-  list-style-type: lower-greek;
+list-style-type: lower-greek;
 }
 .file__listing ul {
-  list-style-type: square;
+list-style-type: square;
 }
 
 .file__listing ul li {
-  margin-bottom: 10px;
+margin-bottom: 10px;
 }
 
 
 
 .file__listing .img__info {
-  padding: 10px;
+padding: 10px;
 }
 
 .files__size {
-  width: 100%;
-  text-align: center;
-  margin-top: 20px;
+width: 100%;
+text-align: center;
+margin-top: 20px;
 }
 
 div.remove-container{
-  text-align: center;
+text-align: center;
 }
 
 div.remove-container a{
-  color: red;
-  cursor: pointer;
+color: red;
+cursor: pointer;
 }
 
 .submit__button {
-  text-align: center;
-  color: white;
-  //font-weight: bold;
-  background-color: #000181;
+text-align: center;
+color: white;
+//font-weight: bold;
+background-color: #000181;
 }
 
 progress {
-  width: 400px;
-  margin: auto;
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 20px;
+width: 400px;
+margin: auto;
+display: block;
+margin-top: 20px;
+margin-bottom: 20px;
 }

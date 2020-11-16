@@ -37,10 +37,7 @@ $re: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAN0lE
   user-select: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-font-smoothing: none;
-}
-
-ul {
-  list-style-type: none;
+  font-smooth: never;
 }
 
 *:focus { outline: none!important; }
@@ -54,6 +51,7 @@ body {
   //background: url("https://unomoralez.com/content/files/catalog2/source/Sailor_S_T00000_1561027772.png");
   //background: url("http://ironfriends.ru/wp-content/themes/sahifa/images/patterns/body-bg9.png");
   //background-repeat: no-repeat;
+  //background-image: url("http://nineties.website/pglit2.gif");
   background-repeat: repeat;
   background-position: center center;
   background-color: $bg;
@@ -66,31 +64,47 @@ body {
   line-height: 11px;
 }
 
-button, input {
-  color: $bl;
-  /*appearance: none;*/
-  font-family: PixelFont, Tahoma, Helvetica, Arial, sans-serif;
+//button, input {
+//  color: $bl;
+//  /*appearance: none;*/
+//  font-family: PixelFont, Tahoma, Helvetica, Arial, sans-serif;
+//}
+
+ul {
+  list-style-type: none;
 }
+
+button {
+  display: inline-block;
+  &:hover, & *:hover {
+    cursor: pointer;
+  }
+}
+
+button.active {
+  box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+}
+
 a[href] {
   cursor: pointer;
 }
 
-button{
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 22px;
-  border: 0;
-  padding: 0 6px 1px;
-  background: $g2;
-  box-shadow: inset -1px -1px 0 0 $bl, inset 1px 1px 0 0 $wh, inset -2px -2px 0 0 $g3, inset 2px 2px 0 0 $g1;
-  &:active {
-    @include ch;
-    box-shadow: inset -1px -1px 0 0 $wh, inset 1px 1px 0 0 $bl, inset -2px -2px 0 0 $g1, inset 2px 2px 0 0 $g2;
-    color: $bl;
-  }
-}
+//button{
+//  cursor: pointer;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  height: 22px;
+//  border: 0;
+//  padding: 0 6px 1px;
+//  background: $g2;
+//  box-shadow: inset -1px -1px 0 0 $bl, inset 1px 1px 0 0 $wh, inset -2px -2px 0 0 $g3, inset 2px 2px 0 0 $g1;
+//  &:active {
+//    @include ch;
+//    box-shadow: inset -1px -1px 0 0 $wh, inset 1px 1px 0 0 $bl, inset -2px -2px 0 0 $g1, inset 2px 2px 0 0 $g2;
+//    color: $bl;
+//  }
+//}
 
 img {
   image-rendering: pixelated;
@@ -116,6 +130,27 @@ img {
   /*height: 550px;*/
   padding: 1px;
   box-shadow: inset -1px -1px 0 0 $bl, inset 1px 1px 0 0 $g1;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h4 {
+    font-size: 1.0rem;
+  }
+
+  h5 {
+    font-size: 0.85rem;
+  }
+
   .avatar {
     display: block;
     img {
@@ -398,29 +433,29 @@ img {
         &:last-child {
           display: flex;
           width: 100%;
-          button {
-            &:first-child {
-              width: 100%;
-            }
-            &:last-child {
-              position: relative;
-              width: 22px;
-              margin-left: 2px;
-              &:after {
-                content: "";
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-image: url($dn);
-                image-rendering: pixelated;
-                background-repeat: no-repeat;
-                background-position: center center;
-              }
-            }
-          }
+          //button {
+          //  &:first-child {
+          //    width: 100%;
+          //  }
+          //  &:last-child {
+          //    position: relative;
+          //    width: 22px;
+          //    margin-left: 2px;
+          //    &:after {
+          //      content: "";
+          //      display: block;
+          //      position: absolute;
+          //      top: 0;
+          //      left: 0;
+          //      width: 100%;
+          //      height: 100%;
+          //      background-image: url($dn);
+          //      image-rendering: pixelated;
+          //      background-repeat: no-repeat;
+          //      background-position: center center;
+          //    }
+          //  }
+          //}
         }
       }
       .desc {
@@ -486,7 +521,7 @@ img {
           &:first-child {
             display: flex;
             button {
-              margin: 0 6px 0 0;
+              //margin: 0 6px 0 0;
             }
           }
         }
