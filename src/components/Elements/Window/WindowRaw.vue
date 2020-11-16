@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div.w-100.h-100.position-absolute
     // Dotted box
     div(
       class="dotted__box"
@@ -14,6 +14,7 @@
       v-if="isOpen",
       v-show="!dragging && !rolling",
       class-name-handle="my-handle",
+      :parent="true",
       :w="initialWidth",
       :h="initialHeight",
       :z="z",
@@ -32,7 +33,7 @@
         div(slot="br")
           img(:src="require(\"@/assets/img/resize_icon.png\")")
         .inner
-            header.bar.drag-handle(:class="{ 'bar-active' : active}")
+            header.bar.drag-handle(:class="{ 'bar-active' : active}" @dblclick="maximizeWindow")
               div.d-flex.flex-row.align-items-center
                 img(:src="iconSrc" width="18px" height="18px")
                 h1 {{ (content.title) ? content.title : windowName}}
@@ -49,10 +50,11 @@
                     .content-section.home
                         .content__body
                             .feed-type
-                                slot
+                                slot(name="content")
                         .content__status
                             .status__type
-                              span [X={{ xDisplay }}] [Y={{ yDisplay }}] [Z={{ zDisplay }}]
+                              slot(name="status")
+                                span [X={{ xDisplay }}] [Y={{ yDisplay }}] [Z={{ zDisplay }}]
 
 </template>
 

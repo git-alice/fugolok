@@ -1,6 +1,7 @@
 <template lang="pug">
   Window(:initOptions="initOptions" :window-name="this.$options.name")
-    DropMeFileForm
+    template(v-slot:content)
+      DropMeFileForm
 </template>
 
 <script>

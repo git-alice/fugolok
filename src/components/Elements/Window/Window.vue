@@ -16,7 +16,10 @@
     @splitWindow="onSplitWindow",
     @onActivated="onActivated"
   )
-    slot
+    template(v-slot:content)
+      slot(name="content")
+    template(v-slot:status)
+      slot(name="status")
 </template>
 
 <script>

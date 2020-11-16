@@ -1,9 +1,10 @@
 <template lang="pug">
   Window(:window-name="this.$options.name" :init-options="initOptions")
-    h1 Library
-    hr
-    slot
-    ImageLibrary
+    template(v-slot:content)
+      h1 Library
+      hr
+      slot
+      ImageLibrary
 </template>
 
 <script>

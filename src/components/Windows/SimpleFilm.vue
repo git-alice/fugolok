@@ -1,6 +1,7 @@
 <template lang="pug">
   Window(:initOptions="initOptions" :window-name="this.$options.name")
-    TestUploadFile
+    template(v-slot:content)
+      TestUploadFile
 </template>
 
 <script>
