@@ -12,24 +12,31 @@
     div(v-else-if="typeof films === 'object'")
       div(class="my-gallery")
         div(v-for="film in films")
-          img(:src="'data:image/jpeg;base64,' + film.preview" style="width: 100px; height: 100px")
-          button(@click="getFilmPreviews(film.name)") {{ film.name }}
+          p Title: {{ film.title }}
+          p Description: {{ film.description }}
+          // p {{ film }}
+          // img(:src="'data:image/jpeg;base64,' + film.preview" style="width: 100px; height: 100px")
+          button(@click="getFilm(film.id)") Show
 
     p Film preview
-    div(v-if="filmPreviews === null")
+    div(v-if="currentFilm === null")
       center
         p Пока ничего не выбрано.
-    div(v-else-if="filmPreviews === 'loading'")
+    div(v-else-if="currentFilm === 'loading'")
       center
         p Грузится...
         img(src="https://i.gifer.com/XVo6.gif" style="width: 25px; height: 25px; ")
-    div(v-else-if="typeof filmPreviews === 'object'")
-      vue-preview(:slides="filmPreviews")
+    div(v-else-if="typeof currentFilm === 'object'")
+      div(v-if="currentFilm.photos.length === 0")
+        p Not a single photo in the film.
+      div(v-else)
+        img(v-for="photo in currentFilm.photos" :key="photo.ETag" :src="photo.presign_url" width="40px")
+      // vue-preview(:slides="filmPreviews")
       // div(class="film__preview")
-      //  div(v-for="film in filmPreviews")
-      //    div
-      //      img(:src="film.msrc")
-      //      center {{ film.name }}
+        // div(v-for="film in filmPreviews")
+          // div
+            //img(:src="film.msrc")
+            //center {{ film.name }}
 </template>
 
 <script>
@@ -57,45 +64,60 @@ export default {
           h: 900
         },
       ],
-      filmPreviews: null,
+      currentFilm: null,
       films: null,
-      filmSources: null
     }
   },
   mounted() {
     let films = null
-
-    let pFilms = fetch('http://localhost:5000/films/')
-    pFilms.then((films) => {
-      return films.json();
+    this.$http.get( 'http://192.168.0.98:8000/api/v1/films/',
+        {
+          params: {
+            skip: 0,
+            limit: 100
+          }
+        }
+    ).then((response) => {
+      return response.data
     }).then((films) => {
       this.films = films
-    })
+    }).catch(() => {
+      console.log('err')
+    }).finally(() => {});
   },
   methods: {
-    getFilmPreviews(filmName) {
-      let filmPreviews = this.filmPreviews = "loading"
-      let filmSources = null
+    getFilm(filmId) {
+      let currentFilm = this.currentFilm = "loading"
 
-      let pFilmPreviews = fetch(`http://localhost:5000/${filmName}`)
-      pFilmPreviews.then((smt) => {
-        return smt.json();
-      }).then((json) => {
-        filmPreviews = json['previews'];
-        // filmSources = json['sources'];
-        filmPreviews = Object.entries(filmPreviews).map(([name, srcBase64], i) => {
-          return {
-            name: name,
-            src: 'data:image/jpeg;base64,'+ srcBase64,
-            msrc: 'data:image/jpeg;base64,'+ srcBase64,
-            // src: filmSources[name],
-            w: 400,
-            h: 400
-          }
-        })
-        console.log(filmPreviews)
-        this.filmPreviews = filmPreviews;
-      })
+      this.$http.get( `http://192.168.0.98:8000/api/v1/films/${filmId}`,
+      ).then((response) => {
+        console.log(response.data);
+        return response.data
+      }).then((film) => {
+        this.currentFilm = film
+      }).catch(() => {
+        console.log('err')
+      }).finally(() => {});
+
+      // let pFilmPreviews = fetch(`http://localhost:5000/${filmName}`)
+      // pFilmPreviews.then((smt) => {
+      //   return smt.json();
+      // }).then((json) => {
+      //   filmPreviews = json['previews'];
+      //   // filmSources = json['sources'];
+      //   filmPreviews = Object.entries(filmPreviews).map(([name, srcBase64], i) => {
+      //     return {
+      //       name: name,
+      //       src: 'data:image/jpeg;base64,'+ srcBase64,
+      //       msrc: 'data:image/jpeg;base64,'+ srcBase64,
+      //       // src: filmSources[name],
+      //       w: 400,
+      //       h: 400
+      //     }
+      //   })
+      //   console.log(filmPreviews)
+      //   this.filmPreviews = filmPreviews;
+      // })
     }
   }
 }
