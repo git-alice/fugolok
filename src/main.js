@@ -9,6 +9,14 @@ import store from './store'
 import VTooltip from 'v-tooltip'
 import Axios from 'axios'
 import AudioVisual from 'vue-audio-visual'
+import VueTour from 'vue-tour'
+
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
+import "98.css";
+
+require('vue-tour/dist/vue-tour.css')
+Vue.use(VueTour)
 
 Vue.use(AudioVisual)
 
