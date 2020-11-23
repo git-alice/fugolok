@@ -14,14 +14,43 @@
           p Type a user name and password to log on to Ugolok.
           br
           .form-group.d-flex.align-items-center.justify-content-between.focused
+            label.mr-3 Nickname:
+            input.form-control.w-75(
+              id="name"
+              type="name"
+              class="form-control"
+              name="name"
+              value
+              required
+              autofocus
+              v-model="form.name"
+            )
+          br
+          .form-group.d-flex.align-items-center.justify-content-between.focused
             label.mr-3 Email:
-            input.form-control.w-75(type='email', placeholder="Email", v-model="username" required)
+            input.form-control.w-75(
+              id="email"
+              type="email"
+              class="form-control"
+              name="email"
+              value
+              required
+              autofocus
+              v-model="form.email"
+            )
           br
           .form-group.d-flex.align-items-center.justify-content-between.focused
             label.mr-3 Password:
-            input.form-control.w-75(type='password' placeholder="password", v-model="password" required)
+            input.form-control.w-75(
+              id="password"
+              type="password"
+              class="form-control"
+              name="password"
+              required
+              v-model="form.password"
+            )
         div.buttons__section.col-2
-          button.btn.btn-sm.btn-primary.border-dark(type='button' @click="firebase_login")
+          button.btn.btn-sm.btn-primary.border-dark(type='button' @click="submit")
             span.btn-text
               span(v-if='!loading') OK
               span(v-if='loading')
@@ -34,50 +63,36 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 import Window from "@/components/Elements/Window/Window";
 
 export default {
-  name: 'LoginWindow',
+  name: 'RegisterWindow',
   data() {
     return {
-      password: '',
-      username: '',
-      loading: false, // loading indicator
-    }
+      form: {
+        name: "",
+        email: "",
+        password: "",
+      },
+      error: null,
+      loading: false
+    };
   },
   components: { Window },
   props: ['initOptions', 'windowName',],
   methods: {
-    login: function () {
-      this.loading = true;
-
-      let username = this.username
-      let password = this.password
-      this.$store.dispatch('login', { username, password })
-          .then(() => this.$router.push('/home'))
-          .catch((err) => {
-            if (err.toJSON().message === "Network Error") {
-              this.$notify({
-                group: 'info',
-                title: 'Приложение недоступно.<hr>',
-                text: 'Попробуйте зайти позднее.',
-              });
-              this.loading = false
-            } else if (err.response.status === 422) {
-              this.$notify({
-                group: 'info',
-                title: 'Неправильный логин или пароль.<hr>',
-                text: 'Попробуйте зайти еще раз.',
-              });
-              this.loading = false
-            }
+    submit() {
+      firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.form.email, this.form.password)
+          .then(data => {
+            console.log(data)
           })
-    },
-    firebase_login: function () {
-      this.$store.dispatch('firebase_login', {
-        email: this.username,
-        password: this.password
-      })
+          .catch(err => {
+            console.log(err)
+          });
     }
   },
 }
