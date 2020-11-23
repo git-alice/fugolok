@@ -15,6 +15,11 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import "98.css";
 
+import { auth } from './firebase'
+
+Vue.config.productionTip = false;
+
+
 require('vue-tour/dist/vue-tour.css')
 Vue.use(VueTour)
 
@@ -65,10 +70,19 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
-new Vue({
-  store,
-  router,
-  render: h => h(App),
-}).$mount('#app')
+let app;
+auth.onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch('fetchUserProfile', user).then(() => {
+      if (!app) {
+        app = new Vue({
+          store,
+          router,
+          render: h => h(App),
+        }).$mount('#app')
+      }
+    })
+  }
+})
 
 export default Vue;

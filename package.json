@@ -20,6 +20,7 @@
     "bootstrap-4-grid": "^3.4.0",
     "bootstrap-vue": "^2.17.3",
     "core-js": "^3.6.5",
+    "firebase": "^8.0.2",
     "haml-loader": "^0.1.0",
     "haml-plain-loader": "^1.0.0",
     "hamljs": "^0.6.2",
@@ -42,6 +43,7 @@
     "vue-router": "^3.3.4",
     "vue-tiny-lazyload-img": "^0.1.0",
     "vue-tour": "^1.5.0",
+    "vuefire": "^2.2.4",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
