@@ -14,7 +14,7 @@ export default {
          * Set default config with help window and put in into local_storage.
          * Default config usually applied on the first login or something get wrong.
          */
-        setDefaultConfig(context, vm) {
+        setDefaultConfig(context) {
             // Let me show 'Help' if it's first start, or something shit happens.
             let defaultWindows = {
                 'Help': {
@@ -27,12 +27,13 @@ export default {
             }
 
             // TODO: To move the interaction to a separate file ~config.js
-            let defaultConfig = {'openedWindows': defaultWindows}
+            // ! let defaultConfig = {'openedWindows': defaultWindows}
 
             // context.commit('updateOpenedWindows', windows) // TODO: Под вопросом
 
             // Put in `userConfig`
-            vm.$cookies.set('userConfig', defaultConfig)
+            localStorage.setItem('windowsConfig', JSON.stringify(defaultWindows))
+            // ! vm.$cookies.set('userConfig', defaultConfig)
         },
         /**
          * Update windows in the config and local_storage;
@@ -53,20 +54,24 @@ export default {
         /**
          * Put windows options to local_storage and state;
          */
+        async parseWindowsConfig(context) {
+            let storageConfigString = localStorage.getItem('windowsConfig')
+            if (!storageConfigString) {
+                storageConfigString = await context.dispatch('setDefaultConfig').then(() => {
+                    storageConfigString = localStorage.getItem('windowsConfig')
+                })
+            }
+            let storageConfig = JSON.parse(storageConfigString)
+            context.commit('updateOpenedWindows', storageConfig)
+        },
         setCookies(context, options) {
-            if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
-                let cookiesConfig = options.vm.$cookies.get('userConfig');
-                // If cookiesConfig === undefined, that is, cookiesConfig doesn't exist
-                // then set defaultConfig to local_storage `userConfig` vie `setDefaultConfig` action
-                // and then get `userConfig` from local_storage
-                if (!cookiesConfig) {
-                    context.dispatch('setDefaultConfig', options.vm).then(() =>
-                        { cookiesConfig = options.vm.$cookies.get('userConfig'); }
-                    )
-                }
+            // TODO: Логика не очень
 
-                // TODO: Логика не очень
-                let currentCookiesWindowOptions = cookiesConfig.openedWindows[options.windowName] || {};
+            if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
+                context.dispatch('parseWindowsConfig')
+                let windowsConfig = context.state.openedWindows
+
+                let currentCookiesWindowOptions = windowsConfig[options.windowName] || {};
                 // If windowName exists in `openedWindows`
                 if (currentCookiesWindowOptions) {
                     let x = options.x || currentCookiesWindowOptions.initX || 0,
@@ -78,59 +83,51 @@ export default {
                         newWindowConfig = Object.assign(currentCookiesWindowOptions,
                             {initX: x, initY: y, initHeight: h, initWidth: w, isOpen: isOpen}),
                         // Merge `openedWindows` and updated window with name equal options.windowName
-                        windows = Object.assign(cookiesConfig.openedWindows, { [options.windowName]: newWindowConfig }),
-                        // Merge config from local_storage and updated windows
-                        updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
+                        newStorageConfig = Object.assign(windowsConfig, { [options.windowName]: newWindowConfig })
 
-                    // Put in `userConfig`
-                    options.vm.$cookies.set('userConfig', updatedUserConfig)
-                    // Commit windows to the state
-                    context.commit('updateOpenedWindows', windows);
+                    localStorage.setItem('windowsConfig', JSON.stringify(newStorageConfig))
+                    context.commit('updateOpenedWindows', newStorageConfig);
                 }
             } else {
-                console.log('Это окно не сохраняется')
+                console.debug('Это окно не сохраняется')
             }
         },
         /**
-         * Load windows from local_storage and put to state
+         * Load windows from localStorage and put to state
          */
         loadCookieWindows(context, vm) {
-            // userConfig = local_storage userConfig if exist or defaultConfig in other case
-            let userConfig = vm.$cookies.get('userConfig');
-            if (!userConfig) context.dispatch('setDefaultConfig', vm);
-            let windows = userConfig.openedWindows;
-
-            // Update state
-            context.commit('updateOpenedWindows', windows);
+            context.dispatch('parseWindowsConfig')
         },
         /**
-         * Delete window from local_storage and state
+         * Delete window from localStorage and state
          */
         deleteWindow(context, options) {
-            let windows = Object.assign({}, context.state.openedWindows) // copy state.openedWindows
-            if (options.windowName in windows) delete windows[options.windowName];
+            // let windows = Object.assign({}, context.state.openedWindows) // copy state.openedWindows
+            context.dispatch('parseWindowsConfig')
+            let windowsConfig = context.state.openedWindows
 
-            let cookiesConfig = options.vm.$cookies.get('userConfig');
-            let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows});
+            if (options.windowName in windowsConfig) {
+                delete windowsConfig[options.windowName];
+            }
 
-            options.vm.$cookies.set('userConfig', updatedUserConfig);
-            context.commit('updateOpenedWindows', windows);
+            // ! let cookiesConfig = options.vm.$cookies.get('userConfig');
+            // ! let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows});
+            // options.vm.$cookies.set('userConfig', updatedUserConfig);
+
+            localStorage.setItem('windowsConfig', JSON.stringify(windowsConfig))
+            context.commit('updateOpenedWindows', windowsConfig);
         },
         /**
-         * Delete all window from local_storage and state
+         * Delete all windows from windowsConfig and state
          */
         deleteAllWindows(context, vm) {
-            // Zero
-            let cookiesConfig = vm.$cookies.get('userConfig');
-            cookiesConfig.openedWindows = {} // обнуление
-
             // Update local_storage and state
-            vm.$cookies.set('userConfig', cookiesConfig)
-            context.commit('updateOpenedWindows', cookiesConfig.openedWindows);
+            vm.$cookies.set('windowsConfig', {})
+            context.commit('updateOpenedWindows', {});
 
         },
         /**
-         * Append window to local_storage and state
+         * Append window to localStorage and state
          */
         appendWindow(context, options) {
             if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
@@ -140,7 +137,6 @@ export default {
                 let initY = options.yWindow ? options.yWindow : (window.innerHeight -  initHeight ) / 2 + getRandomInt(100)
                 let initX = options.xWindow ? options.xWindow : (window.innerWidth - initWidth) / 2 + getRandomInt(100)
 
-                // If window already exist
                 if (options.windowName in windows) {
                     context.dispatch('setActiveWindow', options.windowName);
                     context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
