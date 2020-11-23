@@ -41,15 +41,15 @@ export default {
          *        options.vm -> `this`, that is, Vue object.
          */
         updateWindowsConfig(context, options) {
-            // options.windows -> object with window's properties
-            let windows = options.windows;
-            // Get `userConfig` from local_storage
-            let cookiesConfig = options.vm.$cookies.get('userConfig');
-            // Merge cookiesConfig={openedWindows: {...}, ...} and {openedWindows: windows}
-            let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
-
-            // Put in `userConfig`
-            options.vm.$cookies.set('userConfig', updatedUserConfig)
+            // // options.windows -> object with window's properties
+            // let windows = options.windows;
+            // // Get `userConfig` from local_storage
+            // let cookiesConfig = options.vm.$cookies.get('userConfig');
+            // // Merge cookiesConfig={openedWindows: {...}, ...} and {openedWindows: windows}
+            // let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
+            //
+            // // Put in `userConfig`
+            // options.vm.$cookies.set('userConfig', updatedUserConfig)
         },
         /**
          * Put windows options to local_storage and state;
@@ -148,7 +148,7 @@ export default {
                     )
 
                     // Update local_storage and state
-                    context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
+                    // context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
                     context.commit('updateOpenedWindows', updatedWindows)
                 }
             }

@@ -1,18 +1,18 @@
-import axios from 'axios'
+import { auth, usersCollection } from "../../firebase";
+import router from "../../router"
 
 export default {
     state: {
         status: '',
-        token: localStorage.getItem('token') || '',
-        user : {}
+        user : {'info': 'empty'},
+        userProfile: {},
+        temp: 'temp'
     },
     mutations: {
         auth_request(state){
             state.status = 'loading'
         },
-        auth_success(state, token, user){
-            state.status = 'success'
-            state.token = token
+        setUser(state, user){
             state.user = user
         },
         auth_error(state){
@@ -20,45 +20,31 @@ export default {
         },
         logout(state){
             state.status = ''
-            state.token = ''
         },
+        setUserProfile(state, val) {
+            state.userProfile = val
+        }
     },
     actions: {
-        login({commit}, user) {
-            const formData = new FormData();
-            formData.append('username', user.username);
-            formData.append('password', user.password);
+        async firebase_login({ dispatch, commit }, form) {
+            // sign user in
+            const { user } = await auth.signInWithEmailAndPassword(form.email, form.password)
 
-            return new Promise((resolve, reject) => {
-                commit('auth_request')
-
-                axios({url: 'http://192.168.0.98:8000/api/v1/login/access-token', data: formData, method: 'POST',
-                    headers: {
-                    'accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-                })
-                    .then(resp => {
-                        const token = `${resp.data.token_type} ${resp.data.access_token}`
-                        localStorage.setItem('token', token)
-                        axios.defaults.headers.common['Authorization'] = token
-                        commit('auth_success', token, user)
-                        resolve(resp)
-                    })
-                    .catch(err => {
-                        commit('auth_error', err)
-                        localStorage.removeItem('token')
-                        reject(err)
-                    })
-            })
+            // fetch user profile and set in state
+            dispatch('fetchUserProfile', user)
         },
-        logout({commit}) {
-            return new Promise((resolve, reject) => {
-                commit('logout')
-                localStorage.removeItem('token')
-                delete axios.defaults.headers.common['Authorization']
-                resolve()
-            })
+        async fetchUserProfile({ commit }, user) {
+            // fetch user profile
+            const userProfile = await usersCollection.doc(user.uid).get()
+
+            // set user profile in state
+            commit('setUser', user)
+            commit('setUserProfile', userProfile.data())
+
+            // change route to dashboard
+            if (router.currentRoute.path === '/login') {
+                await router.push('/home')
+            }
         }
     },
     getters : {
