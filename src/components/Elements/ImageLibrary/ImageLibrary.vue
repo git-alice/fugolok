@@ -81,8 +81,11 @@ export default {
       return response.data
     }).then((films) => {
       this.films = films
-    }).catch(() => {
-      console.log('err')
+    }).catch((err) => {
+      if (err.response.status === 403) {
+        console.log('err')
+        this.$store.dispatch('logout')
+      }
     }).finally(() => {});
   },
   methods: {
@@ -95,8 +98,10 @@ export default {
         return response.data
       }).then((film) => {
         this.currentFilm = film
-      }).catch(() => {
-        console.log('err')
+      }).catch((err) => {
+        if (err.response.status === 403) {
+          console.log('err')
+        }
       }).finally(() => {});
 
       // let pFilmPreviews = fetch(`http://localhost:5000/${filmName}`)
