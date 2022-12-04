@@ -8,12 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "98.css": "^0.1.16",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "^2.0.0",
-    "@popperjs/core": "^2.4.4",
+    "@popperjs/core": "^2.11.6",
     "@shopify/draggable": "^1.0.0-beta.8",
+    "98.css": "^0.1.16",
     "amplitudejs": "^5.2.0",
     "animejs": "^3.2.0",
     "axios": "^0.19.2",
@@ -44,7 +44,8 @@
     "vue-tiny-lazyload-img": "^0.1.0",
     "vue-tour": "^1.5.0",
     "vuefire": "^2.2.4",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "webpack": "^4.46.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
@@ -54,12 +55,10 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^4.14.1",
-    "pug": "^3.0.0",
-    "pug-loader": "^2.4.0",
-    "pug-plain-loader": "^1.0.0",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.2.1",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "^1.56.1",
+    "sass-loader": "^10.4.1",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

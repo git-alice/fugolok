@@ -92,7 +92,7 @@ export default {
     },
     iconSrc: {
       type: String,
-      default: require('@/assets/img/new_folder_2.png')
+      // default: require('@/assets/img/new_folder_2.png')
     },
     content: {
       type: Object,
@@ -266,7 +266,7 @@ export default {
      * On activated callback
      */
     onActivated() {
-      this.$refs.window.zIndex = 5;
+      // this.$refs.window.zIndex = 5;
       this.active = true;
       this.$emit('onActivated')
     },
@@ -275,7 +275,7 @@ export default {
      */
     onDeactivated() {
       this.active = false;
-      this.$refs.window.zIndex = 4;
+      // this.$refs.window.zIndex = 4;
     },
 
     // --- Initialization ---

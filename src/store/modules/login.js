@@ -33,17 +33,25 @@ export default {
             // fetch user profile and set in state
             dispatch('fetchUserProfile', user)
         },
+        async firebase_logout({ dispatch, commit }, form) {
+            await auth.signOut()
+            router.push('/')
+        },
         async fetchUserProfile({ commit }, user) {
-            // fetch user profile
-            const userProfile = await usersCollection.doc(user.uid).get()
+            if (user) {
+                // fetch user profile
+                const userProfile = await usersCollection.doc(user.uid).get()
 
-            // set user profile in state
-            commit('setUser', user)
-            commit('setUserProfile', userProfile.data())
+                // set user profile in state
+                commit('setUserProfile', userProfile.data())
 
-            // change route to dashboard
-            if (router.currentRoute.path === '/login') {
-                await router.push('/home')
+                // change route to dashboard
+                if (router.currentRoute.path === '/login') {
+                    router.push('/home')
+                }
+            } else {
+                // change route to login
+                router.push('/')
             }
         }
     },

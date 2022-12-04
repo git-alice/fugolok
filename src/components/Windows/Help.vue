@@ -4,7 +4,10 @@
       div.d-flex
         h2 Welcome to our darkroom
         span.d-table.m-auto.w-auto(v-tooltip.auto="{content: 'Click to find out how everything works here!', classes: 'simple__tooltip', trigger: 'hover', boundariesElement: 'body'}")
-          img.tour__img(:src="require(\"@/assets/img/help_book.png\")" @click="startTour")
+          img.tour__img(
+            :src="require(\"@/assets/img/computer.png\")"
+            @click="startTour"
+          )
       div
       | Use <kbd>Ctrl</kbd> + [<kbd>Left</kbd>, <kbd>Right</kbd>, <kbd>Up</kbd>, <kbd>Down</kbd>] for split, fullscreen and minimize active window.
       hr

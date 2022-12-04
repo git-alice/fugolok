@@ -2,6 +2,7 @@
   .wrapper
     .header
       router-link(to="/home") Home
+      router-link(to="/login") Login
     .neon_wrapper
       .text__neon
         | YO<i>U</i> ARE
@@ -44,7 +45,8 @@ body {
     height: 200px;
     padding: 2rem;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: start;
   }
 }
 

@@ -9,8 +9,6 @@
       // This will be the content of the popover
       template(slot='popover')
         div.d-flex.justify-content-between.align-content-center.start__wrapper
-          // div.border-dark.p-3
-          //  p kek
           h2 Ugolok <em>95</em>
           div.group.w-100.d-flex.flex-column.justify-content-start
             v-popover(offset='0' classes="start__root__button" openClass='popover__active' boundariesElement="body" trigger="hover" placement='right-start' @apply-show="isOpen = true")
@@ -39,7 +37,7 @@
             hr.w-100
             .item.logout.w-100
               i.logout
-              span.label Logout
+              span.label(@click="signOut") Logout
 
 </template>
 
@@ -50,6 +48,11 @@ export default {
     return {
       startIsOpen: false,
       isOpen: false
+    }
+  },
+  methods: {
+    signOut() {
+      this.$store.dispatch('firebase_logout');
     }
   }
 }

@@ -4,9 +4,8 @@
       Start(@click="")
 
       // Left status bar | Opened windows
-      button.task__button(v-for="(value, key, i) in getAllWindows()" @click="onRollWindow($event, key)" :class="value.isOpen ? 'active': ''")
-        img(:src="value.src" height="17px" width="17px")
-        p Window {{ key }}
+      span(v-for="(value, key, i) in getAllWindows()" @click="onRollWindow($event, key)" :class="value.isOpen ? 'active': ''")
+        TaskButton(:name="key" :src="value.src")
 
       // Right status bar
       button.task__button(@click="closeAllWindows" style="margin-left: auto;") C.A.

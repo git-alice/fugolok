@@ -53,7 +53,7 @@ export default {
         dragAndDropCapable: false,
         files: [],
         uploadPercentage: 30,
-        srcImage: require('@/assets/img/files.png')
+        // srcImage: require('@/assets/img/files.png')
       }
   },
   /**
@@ -107,7 +107,7 @@ export default {
             } else {
                 // Show if can't reading
                 this.$nextTick(function(){
-                    this.$refs['preview' + parseInt(i)][0].src = require('@/assets/img/white_blank.png');
+                    this.$refs['preview' + parseInt(i)][0].src = null // require('@/assets/img/white_blank.png');
                 });
             }
         }

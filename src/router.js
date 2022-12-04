@@ -14,7 +14,7 @@ let router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/main',
+            path: '/',
             component: Land,
             meta: {
                 requiresAuth: false
@@ -51,11 +51,14 @@ let router = new VueRouter({
 //     }
 // })
 router.beforeEach((to, from, next) => {
+    console.log('111')
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
 
     if (requiresAuth && !auth.currentUser) {
+        console.log('1')
         next('/login')
     } else {
+        console.log('2')
         next()
     }
 })

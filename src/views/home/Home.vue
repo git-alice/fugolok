@@ -3,9 +3,9 @@
       // --- All Windows ---
       div.w-100.h-100.position-absolute(v-for="(value, name) in getAllWindows()" :key="name")
         keep-alive
-          component(:is="name" v-if="value.isOpen" :initOptions="value" :ref="name")
-            // div {{ name }}
-            // div {{ value }}
+        component(:is="name" v-if="value.isOpen" :initOptions="value" :ref="name")
+          // div {{ name }}
+          // div {{ value }}
 
       // --- All Icons ---
       div(v-for="(icon, index) in icons")

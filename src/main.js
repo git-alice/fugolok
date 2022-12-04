@@ -72,17 +72,15 @@ Vue.config.productionTip = false
 
 let app;
 auth.onAuthStateChanged(user => {
-  if (user) {
-    store.dispatch('fetchUserProfile', user).then(() => {
-      if (!app) {
-        app = new Vue({
-          store,
-          router,
-          render: h => h(App),
-        }).$mount('#app')
-      }
-    })
-  }
+  store.dispatch('fetchUserProfile', user).then(() => {
+    if (!app) {
+      app = new Vue({
+        store,
+        router,
+        render: h => h(App),
+      }).$mount('#app')
+    }
+  })
 })
 
 export default Vue;

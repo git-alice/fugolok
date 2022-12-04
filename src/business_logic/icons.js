@@ -40,7 +40,7 @@ let icons = [
     {
         component: Icon,
         window: Radio,
-        src: require("@/assets/img/Volume Dialog.png")
+        // src: require("@/assets/img/Volume Dialog.png")
     },
 ]
 
