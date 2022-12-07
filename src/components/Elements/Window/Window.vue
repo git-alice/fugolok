@@ -36,10 +36,10 @@ export default {
     },
     methods: {
       onWindowResizingStop(w, h) {
-        this.$store.dispatch('setCookies', {windowName: this.windowName, w: w, h: h, vm: this});
+        this.$store.dispatch('updateWindow', {windowName: this.windowName, w: w, h: h, vm: this});
       },
       onDragWindowStop(x, y) {
-        this.$store.dispatch('setCookies', {windowName: this.windowName, x: x, y: y, vm: this})
+        this.$store.dispatch('updateWindow', {windowName: this.windowName, x: x, y: y, vm: this})
       },
       onCloseWindow() {
         // this.$store.dispatch('setDefaultConfig', this)
@@ -47,15 +47,15 @@ export default {
         this.$store.dispatch('deleteWindow', {windowName: this.windowName, vm: this})
       },
       onRollWindow() {
-        this.$store.dispatch('setCookies', {windowName: this.windowName, isOpen: false, vm: this})
+        this.$store.dispatch('updateWindow', {windowName: this.windowName, isOpen: false, vm: this})
       },
       onMaximizeWindow(x, y, w, h) {
         let options = {windowName: this.windowName, w: w, h: h, x: x, y: y, vm: this};
-        this.$store.dispatch('setCookies', options)
+        this.$store.dispatch('updateWindow', options)
       },
       onSplitWindow(x, y, w, h) {
         let options = {windowName: this.windowName, w: w, h: h, x: x, y: y, vm: this};
-        this.$store.dispatch('setCookies', options)
+        this.$store.dispatch('updateWindow', options)
       },
       onActivated() {
         this.$store.dispatch('setActiveWindow', this.$parent.$options.name)

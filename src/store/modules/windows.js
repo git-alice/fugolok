@@ -65,6 +65,7 @@ export default {
             context.commit('updateOpenedWindows', storageConfig)
         },
         setCookies(context, options) {
+            console.log('setCookies', options)
             // TODO: Логика не очень
 
             if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
@@ -115,6 +116,7 @@ export default {
             // options.vm.$cookies.set('userConfig', updatedUserConfig);
 
             localStorage.setItem('windowsConfig', JSON.stringify(windowsConfig))
+            console.log('windowsConfig !!!', windowsConfig)
             context.commit('updateOpenedWindows', windowsConfig);
         },
         /**
@@ -149,8 +151,27 @@ export default {
 
                     // Update local_storage and state
                     // context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
+                    console.log('appendWindow !!!', updatedWindows);
                     context.commit('updateOpenedWindows', updatedWindows)
                 }
+            }
+        },
+        updateWindow(context, options) {
+            if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
+                let windows = context.state.openedWindows;
+                let updatedWindows = Object.assign(
+                    {},
+                    windows,
+                    {[options.windowName]: {initX: options.x, initY: options.y, initHeight: options.h, initWidth: options.w, isOpen: true}},
+                )
+
+                // Update local_storage and state
+                // context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
+                console.log('updateWindow !!!', updatedWindows);
+                context.commit('updateOpenedWindows', updatedWindows)
+                localStorage.setItem('windowsConfig', JSON.stringify(updatedWindows))
+            } else {
+                console.debug('Это окно не сохраняется')
             }
         },
         /**
@@ -165,9 +186,11 @@ export default {
          * Mutations are used to update the state
          */
         updateOpenedWindows(state, windows) {
+            console.log('updateOpenedWindows', windows);
             state.openedWindows = windows;
         },
         updateActiveWindow(state, activeWindow) {
+            console.log('updateActiveWindow', activeWindow);
             state.activeWindow = activeWindow;
         }
     },
@@ -176,12 +199,15 @@ export default {
          * Getters are used to take data from the state
          */
         allWindows(state) {
+            console.log('allWindows', state.openedWindows);
             return state.openedWindows
         },
         activeWindow(state) {
+            console.log('activeWindow', state.activeWindow);
             return state.activeWindow
         },
         windowByName(state) {
+            console.log('windowByName', state.openedWindows);
             return windowName => state.openedWindows[windowName]
         }
     },

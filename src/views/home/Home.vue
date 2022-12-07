@@ -3,9 +3,9 @@
       // --- All Windows ---
       div.w-100.h-100.position-absolute(v-for="(value, name) in getAllWindows()" :key="name")
         keep-alive
-        component(:is="name" v-if="value.isOpen" :initOptions="value" :ref="name")
-          // div {{ name }}
-          // div {{ value }}
+          component(:is="name" v-if="value.isOpen" :initOptions="value" :ref="name")
+            // div {{ name }}
+            // div {{ value }}
 
       // --- All Icons ---
       div(v-for="(icon, index) in icons")
@@ -13,14 +13,6 @@
 
       // --- Taskbar ---
       Taskbar
-
-      // --- ContextMenu ---
-      ContextMenu(ref="menu")
-        template(slot-scope="{ contextData }")
-          ContextMenuItem(@click.native="")
-            div Action 1 {{ contextData }}
-          ContextMenuItem(@click.native="")
-            div Action 2 {{ contextData }}
 
       // --- KeyResizing ---
       Keypress(key-event="keyup" :key-code="39" :modifiers="['ctrlKey']" @success="splitWindowByKeys('right')")
@@ -70,9 +62,6 @@ import Taskbar from '../../components/Taskbar/Taskbar'
 import Button from "../../components/Elements/Button/Button";
 import Icon from "../../components/Elements/Icon/Icon"
 
-import ContextMenu from "@/components/Elements/ContextMenu/ContextMenu";
-import ContextMenuItem from "@/components/Elements/ContextMenu/ContextMenuItem";
-
 import icons from "@/business_logic/icons";
 
 export default {
@@ -110,7 +99,7 @@ export default {
   },
   components: {
     Library, SimpleFilm, DragAndDropFilm, Account, Help, Radio,
-    Taskbar, Button, Icon, ContextMenu, ContextMenuItem, Keypress: () => import('vue-keypress')
+    Taskbar, Button, Icon, Keypress: () => import('vue-keypress')
   },
   methods: {
     /**
