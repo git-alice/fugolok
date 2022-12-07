@@ -36,6 +36,7 @@ export default {
     },
     methods: {
       onWindowResizingStop(w, h) {
+        console.log('onWindowResizingStop', w, h)
         this.$store.dispatch('updateWindow', {windowName: this.windowName, w: w, h: h, vm: this});
       },
       onDragWindowStop(x, y) {

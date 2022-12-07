@@ -3,11 +3,47 @@ import { windowNamesThatWeSaved } from "@/business_logic/windows"
 
 console.log('windowNamesThatWeSaved', windowNamesThatWeSaved)
 
+class WindowZindexManager {
+    constructor(windows) {
+        let i = 1;
+        this.zIndexes = {};
+        for (let windowName in windows) {
+            this.zIndexes[windowName] = i;
+            i++;
+        }
+    }
+
+    getZindex(windowName) {
+        if (!(windowName in this.zIndexes.hasOwnProperty)) {
+            this.addWindow(windowName);
+        }
+        return this.zIndexes[windowName];
+    }
+
+    setActiveWindow(windowName) {
+        if (!(windowName in this.zIndexes.hasOwnProperty)) {
+            this.addWindow(windowName);
+        }
+        let maxZindex = Math.max(...Object.values(this.zIndexes));
+        // Обнови zIndex, подняв его для windowName на 1, а для остальных на 1 вниз
+        for (let windowName in this.zIndexes) {
+            this.zIndexes[windowName] -= 1;
+        }
+        this.zIndexes[windowName] = maxZindex;
+    }
+
+    addWindow(windowName) {
+        let maxZindex = Math.max(...Object.values(this.zIndexes), 0);
+        this.zIndexes[windowName] = maxZindex + 1;
+    }
+}
+
 export default {
     state: {
         windowNamesThatWeSaved: windowNamesThatWeSaved,
         openedWindows: {},
-        activeWindow: ''
+        activeWindow: '',
+        zIndexManager: new WindowZindexManager({}),
     },
     actions: {
         /**
@@ -22,6 +58,7 @@ export default {
                     initWidth: 375,
                     initX: 0,
                     initY: 0,
+                    zIndex: 1,
                     isOpen: true
                 },
             }
@@ -61,6 +98,7 @@ export default {
                     storageConfigString = localStorage.getItem('windowsConfig')
                 })
             }
+            console.log('storageConfigString', storageConfigString)
             let storageConfig = JSON.parse(storageConfigString)
             context.commit('updateOpenedWindows', storageConfig)
         },
@@ -156,6 +194,16 @@ export default {
                 }
             }
         },
+        updateWindowZindex(context, options) {
+            let windows = context.state.openedWindows;
+            let updatedWindows = Object.assign(
+                {},
+                windows,
+                {[options.windowName]: {zIndex: options.zIndex}},
+            )
+            localStorage.setItem('windowsConfig', JSON.stringify(updatedWindows))
+            return updatedWindows
+        },
         updateWindow(context, options) {
             if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
                 let windows = context.state.openedWindows;
@@ -171,14 +219,16 @@ export default {
                 context.commit('updateOpenedWindows', updatedWindows)
                 localStorage.setItem('windowsConfig', JSON.stringify(updatedWindows))
             } else {
-                console.debug('Это окно не сохраняется')
+                context.commit('appendWindow', options)
             }
         },
         /**
          * Make window is active by name
          */
         setActiveWindow(context, windowName) {
+            context.dispatch('updateWindowZindex', {windowName: windowName, zIndex: context.state.zIndexManager.getZindex(windowName) + 1})
             context.commit('updateActiveWindow', windowName)
+            // context.commit('updateOpenedWindows', updatedWindows)
         }
     },
     mutations: {
@@ -188,9 +238,11 @@ export default {
         updateOpenedWindows(state, windows) {
             console.log('updateOpenedWindows', windows);
             state.openedWindows = windows;
+            state.zIndexManager = new WindowZindexManager(windows);
         },
         updateActiveWindow(state, activeWindow) {
             console.log('updateActiveWindow', activeWindow);
+            state.zIndexManager = state.zIndexManager.setActiveWindow(activeWindow)
             state.activeWindow = activeWindow;
         }
     },

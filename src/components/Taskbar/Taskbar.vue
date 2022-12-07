@@ -8,7 +8,7 @@
         TaskButton(:name="key" :src="value.src")
 
       // Right status bar
-      button.task__button(@click="closeAllWindows" style="margin-left: auto;") C.A.
+      button.task__button.close_all__button(@click="closeAllWindows" style="margin-left: auto;") xxx
 </template>
 
 <script>
@@ -50,10 +50,10 @@ export default {
         console.log(this.$store.getters.windowByName(windowName))
         if (this.$store.getters.windowByName(windowName).isOpen) {
           console.log('Закрыл');
-          this.$store.dispatch('setCookies', {windowName: windowName, isOpen: false, vm: this})
+          this.$store.dispatch('appendWindow', {windowName: windowName, isOpen: false, vm: this})
         } else {
           console.log('Открыл');
-          this.$store.dispatch('setCookies', {windowName: windowName, isOpen: true, vm: this})
+          this.$store.dispatch('appendWindow', {windowName: windowName, isOpen: true, vm: this})
         }
       },
     }
@@ -91,5 +91,9 @@ $bg: #149091;
       margin-left: 0.3rem;
     }
   }
+
+  .close_all__button {
+      min-width: 30px;
+    }
 }
 </style>
