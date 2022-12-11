@@ -106,6 +106,7 @@ export default {
      * Returns all open Windows.
      */
     getAllWindows() {
+      console.log('getAllWindows', this.$store.getters.allWindows)
       return this.$store.getters.allWindows;
     },
     /**

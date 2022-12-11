@@ -17,7 +17,7 @@
       :parent="true",
       :w="initialWidth",
       :h="initialHeight",
-      :z="z",
+      :z="initialZ",
       :min-width="300",
       :min-height="200",
       :drag-handle="'.drag-handle'",
@@ -82,6 +82,10 @@ export default {
       type: Number,
       default: 100
     },
+    initZ: {
+      type: Number,
+      default: 4
+    },
     windowType: {
       type: String,
       default: 'default'
@@ -106,12 +110,12 @@ export default {
       // Init values
       initialWidth: this.initializeWidth(),
       initialHeight: this.initializeHeight(),
+      initialZ: this.initializeZ(),
       isOpen: true,
       active: false, // ?
       dragging: false, // ?
       rolling: false, // ?
       maximized: false, // ?
-      z: 4,
       // To display on the window
       xDisplay: null,
       yDisplay: null,
@@ -291,12 +295,17 @@ export default {
     initializeHeight() {
       return this.initHeight ? this.initHeight : 200;
     },
+    initializeZ() {
+      return this.initialZ ? this.initialZ : 4;
+    },
   },
   mounted() {
     // Setting initial position values
-    let x = this.initX ? this.initX : 0;
-    let y = this.initY ? this.initY : 0;
-    this.xDisplay = x; this.yDisplay = y; this.zDisplay = this.z;
+    console.log(this.initX, this.initY, this.initZ);
+    let x = this.initX;
+    let y = this.initY;
+    let z = this.initZ;
+    this.xDisplay = x; this.yDisplay = y; this.zDisplay = z;
     this.$refs.window.moveVertically(y);
     this.$refs.window.moveHorizontally(x);
 

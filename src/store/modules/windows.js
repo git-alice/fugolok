@@ -1,8 +1,6 @@
 import getRandomInt from "@/utils/random";
 import { windowNamesThatWeSaved } from "@/business_logic/windows"
 
-console.log('windowNamesThatWeSaved', windowNamesThatWeSaved)
-
 class WindowZindexManager {
     constructor(windows) {
         let i = 1;
@@ -58,35 +56,12 @@ export default {
                     initWidth: 375,
                     initX: 0,
                     initY: 0,
-                    zIndex: 1,
+                    initZ: 1,
                     isOpen: true
                 },
             }
-
-            // TODO: To move the interaction to a separate file ~config.js
-            // ! let defaultConfig = {'openedWindows': defaultWindows}
-
-            // context.commit('updateOpenedWindows', windows) // TODO: Под вопросом
-
-            // Put in `userConfig`
-            localStorage.setItem('windowsConfig', JSON.stringify(defaultWindows))
-            // ! vm.$cookies.set('userConfig', defaultConfig)
-        },
-        /**
-         * Update windows in the config and local_storage;
-         * Where: options.window -> Object with windows properties;
-         *        options.vm -> `this`, that is, Vue object.
-         */
-        updateWindowsConfig(context, options) {
-            // // options.windows -> object with window's properties
-            // let windows = options.windows;
-            // // Get `userConfig` from local_storage
-            // let cookiesConfig = options.vm.$cookies.get('userConfig');
-            // // Merge cookiesConfig={openedWindows: {...}, ...} and {openedWindows: windows}
-            // let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows})
-            //
-            // // Put in `userConfig`
-            // options.vm.$cookies.set('userConfig', updatedUserConfig)
+            context.commit('updateOpenedWindows', defaultWindows)
+            context.commit('updateLocalStorage', defaultWindows)
         },
         /**
          * Put windows options to local_storage and state;
@@ -98,7 +73,6 @@ export default {
                     storageConfigString = localStorage.getItem('windowsConfig')
                 })
             }
-            console.log('storageConfigString', storageConfigString)
             let storageConfig = JSON.parse(storageConfigString)
             context.commit('updateOpenedWindows', storageConfig)
         },
@@ -141,7 +115,6 @@ export default {
          * Delete window from localStorage and state
          */
         deleteWindow(context, options) {
-            // let windows = Object.assign({}, context.state.openedWindows) // copy state.openedWindows
             context.dispatch('parseWindowsConfig')
             let windowsConfig = context.state.openedWindows
 
@@ -149,19 +122,13 @@ export default {
                 delete windowsConfig[options.windowName];
             }
 
-            // ! let cookiesConfig = options.vm.$cookies.get('userConfig');
-            // ! let updatedUserConfig = Object.assign(cookiesConfig, {openedWindows: windows});
-            // options.vm.$cookies.set('userConfig', updatedUserConfig);
-
             localStorage.setItem('windowsConfig', JSON.stringify(windowsConfig))
-            console.log('windowsConfig !!!', windowsConfig)
             context.commit('updateOpenedWindows', windowsConfig);
         },
         /**
          * Delete all windows from windowsConfig and state
          */
         deleteAllWindows(context, vm) {
-            // Update local_storage and state
             vm.$cookies.set('windowsConfig', {})
             context.commit('updateOpenedWindows', {});
 
@@ -179,18 +146,13 @@ export default {
 
                 if (options.windowName in windows) {
                     context.dispatch('setActiveWindow', options.windowName);
-                    context.dispatch('setCookies', { windowName: options.windowName, isOpen: true, vm: options.vm })
+                    context.dispatch('updateWindow', options)
                 } else {
-                    let updatedWindows = Object.assign(
-                        {},
-                        windows,
-                        {[options.windowName]: {initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src}},
-                    )
-
-                    // Update local_storage and state
-                    // context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
-                    console.log('appendWindow !!!', updatedWindows);
-                    context.commit('updateOpenedWindows', updatedWindows)
+                    let updatedWindow = {
+                        initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src
+                    }
+                    context.commit('updateOrInsertWindow', {windowName: options.windowName, windowConfig: updatedWindow})
+                    context.commit('updateLocalStorage', context.state.openedWindows)
                 }
             }
         },
@@ -205,36 +167,36 @@ export default {
             return updatedWindows
         },
         updateWindow(context, options) {
-            if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
+            if (context.state.windowNamesThatWeSaved.includes(options.windowName) && options.windowName in context.state.openedWindows) {
                 let windows = context.state.openedWindows;
-                let updatedWindows = Object.assign(
-                    {},
-                    windows,
-                    {[options.windowName]: {initX: options.x, initY: options.y, initHeight: options.h, initWidth: options.w, isOpen: true}},
-                )
-
-                // Update local_storage and state
-                // context.dispatch('updateWindowsConfig', {windows: updatedWindows, vm: options.vm});
-                console.log('updateWindow !!!', updatedWindows);
-                context.commit('updateOpenedWindows', updatedWindows)
-                localStorage.setItem('windowsConfig', JSON.stringify(updatedWindows))
+                let updatedWindow = null;
+                for (let key in windows) {
+                    if (key === options.windowName) {
+                        updatedWindow = Object.assign(windows[key] || {}, {initX: options.x, initY: options.y, initHeight: options.h, initWidth: options.w, isOpen: true})
+                    }
+                }
+                context.commit('updateOrInsertWindow', {windowName: options.windowName, windowConfig: updatedWindow})
+                context.commit('updateLocalStorage', context.state.openedWindows)
             } else {
+                console.log('update -> append')
                 context.commit('appendWindow', options)
+                context.commit('updateLocalStorage', context.state.openedWindows)
             }
         },
         /**
          * Make window is active by name
          */
         setActiveWindow(context, windowName) {
-            context.dispatch('updateWindowZindex', {windowName: windowName, zIndex: context.state.zIndexManager.getZindex(windowName) + 1})
             context.commit('updateActiveWindow', windowName)
-            // context.commit('updateOpenedWindows', updatedWindows)
         }
     },
     mutations: {
         /**
          * Mutations are used to update the state
          */
+        updateLocalStorage(state, openedWindows) {
+            localStorage.setItem('windowsConfig', JSON.stringify(openedWindows))
+        },
         updateOpenedWindows(state, windows) {
             console.log('updateOpenedWindows', windows);
             state.openedWindows = windows;
@@ -242,8 +204,12 @@ export default {
         },
         updateActiveWindow(state, activeWindow) {
             console.log('updateActiveWindow', activeWindow);
-            state.zIndexManager = state.zIndexManager.setActiveWindow(activeWindow)
             state.activeWindow = activeWindow;
+        },
+        updateOrInsertWindow(state, {windowName, windowConfig}) {
+            console.log('updateOrInsertWindow', windowName, windowConfig);
+            state.openedWindows[windowName] = windowConfig;
+            state.openedWindows = Object.assign({}, state.openedWindows)
         }
     },
     getters: {
@@ -251,15 +217,12 @@ export default {
          * Getters are used to take data from the state
          */
         allWindows(state) {
-            console.log('allWindows', state.openedWindows);
             return state.openedWindows
         },
         activeWindow(state) {
-            console.log('activeWindow', state.activeWindow);
             return state.activeWindow
         },
         windowByName(state) {
-            console.log('windowByName', state.openedWindows);
             return windowName => state.openedWindows[windowName]
         }
     },
