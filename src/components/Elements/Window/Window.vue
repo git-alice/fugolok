@@ -4,7 +4,7 @@
     :init-height="initOptions.initHeight",
     :init-x="initOptions.initX",
     :init-y="initOptions.initY",
-    :init-Z="initOptions.initZ",
+    :init-z="initOptions.initZ",
     :icon-src="initOptions.src",
     :windowType="windowType",
     :window-name="windowName",

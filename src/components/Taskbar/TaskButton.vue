@@ -54,6 +54,11 @@ export default {
 .task__button__wrapper {
   position: relative;
   display: inline-block;
+
+  .task__button {
+    padding: unset;
+  }
+
   .task__button_menu {
     width: 100%;
     position: absolute;

@@ -42,6 +42,7 @@ export default {
         openedWindows: {},
         activeWindow: '',
         zIndexManager: new WindowZindexManager({}),
+        DEFAULT_WINDOW_Z_INDEX: 5,
     },
     actions: {
         /**
@@ -138,47 +139,57 @@ export default {
          */
         appendWindow(context, options) {
             if (context.state.windowNamesThatWeSaved.includes(options.windowName)) {
-                let windows = context.state.openedWindows;
-                let initHeight = options.heightWindow ? options.heightWindow : window.innerHeight / 2
-                let initWidth = options.widthWindow ? options.widthWindow : window.innerWidth / 2
-                let initY = options.yWindow ? options.yWindow : (window.innerHeight -  initHeight ) / 2 + getRandomInt(100)
-                let initX = options.xWindow ? options.xWindow : (window.innerWidth - initWidth) / 2 + getRandomInt(100)
+                let openedWindows = context.state.openedWindows;
 
-                if (options.windowName in windows) {
+                if (options.windowName in openedWindows) {
                     context.dispatch('setActiveWindow', options.windowName);
                     context.dispatch('updateWindow', options)
                 } else {
+                    let initHeight = options.heightWindow ? options.heightWindow : window.innerHeight / 2
+                    let initWidth = options.widthWindow ? options.widthWindow : window.innerWidth / 2
+                    let initY = options.yWindow ? options.yWindow : (window.innerHeight -  initHeight ) / 2 + getRandomInt(100)
+                    let initX = options.xWindow ? options.xWindow : (window.innerWidth - initWidth) / 2 + getRandomInt(100)
+                    let initZ = Object.keys(openedWindows).length > 0
+                                ? Math.max(...Object.entries(openedWindows).map(([k, v], i) => v.initZ || context.state.DEFAULT_WINDOW_Z_INDEX)) + 1
+                                : context.state.DEFAULT_WINDOW_Z_INDEX
+                    
+                    console.log('initZ', initZ, ...Object.entries(openedWindows).map(([k, v], i) => v.initZ || context.state.DEFAULT_WINDOW_Z_INDEX))
+                    
                     let updatedWindow = {
-                        initX: initX, initY: initY, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src
+                        initX: initX, initY: initY, initZ: initZ, initHeight: initHeight, initWidth: initWidth, isOpen: true, src: options.src
                     }
-                    context.commit('updateOrInsertWindow', {windowName: options.windowName, windowConfig: updatedWindow})
+                    context.commit('appendWindow', {windowName: options.windowName, windowConfig: updatedWindow})
                     context.commit('updateLocalStorage', context.state.openedWindows)
                 }
+            } else {
+                console.info(`Окно ${options.windowName} не поддерживается.`)
             }
         },
-        updateWindowZindex(context, options) {
-            let windows = context.state.openedWindows;
-            let updatedWindows = Object.assign(
-                {},
-                windows,
-                {[options.windowName]: {zIndex: options.zIndex}},
-            )
-            localStorage.setItem('windowsConfig', JSON.stringify(updatedWindows))
-            return updatedWindows
-        },
+        // updateWindowZindex(context, options) {
+        //     let windows = context.state.openedWindows;
+        //     let updatedWindows = Object.assign(
+        //         {},
+        //         windows,
+        //         {[options.windowName]: {zIndex: options.zIndex}},
+        //     )
+        //     localStorage.setItem('windowsConfig', JSON.stringify(updatedWindows))
+        //     return updatedWindows
+        // },
         updateWindow(context, options) {
             if (context.state.windowNamesThatWeSaved.includes(options.windowName) && options.windowName in context.state.openedWindows) {
                 let windows = context.state.openedWindows;
                 let updatedWindow = null;
                 for (let key in windows) {
                     if (key === options.windowName) {
-                        updatedWindow = Object.assign(windows[key] || {}, {initX: options.x, initY: options.y, initHeight: options.h, initWidth: options.w, isOpen: true})
+                        updatedWindow = Object.assign(
+                            windows[key] || {},
+                            {initX: options.x, initY: options.y, initHeight: options.h, initWidth: options.w, isOpen: true}
+                        )
                     }
                 }
-                context.commit('updateOrInsertWindow', {windowName: options.windowName, windowConfig: updatedWindow})
+                context.commit('updateWindow', {windowName: options.windowName, windowConfig: updatedWindow})
                 context.commit('updateLocalStorage', context.state.openedWindows)
             } else {
-                console.log('update -> append')
                 context.commit('appendWindow', options)
                 context.commit('updateLocalStorage', context.state.openedWindows)
             }
@@ -187,7 +198,21 @@ export default {
          * Make window is active by name
          */
         setActiveWindow(context, windowName) {
-            context.commit('updateActiveWindow', windowName)
+            // debugger;   // eslint-disable-line no-debugger
+            let windows = JSON.parse(JSON.stringify(context.state.openedWindows));
+            let lastInitZ = windows[windowName]['initZ'];
+            let maxInitZ = Math.max(...Object.entries(windows).map(([k, v], i) => v.initZ || context.state.DEFAULT_WINDOW_Z_INDEX));
+
+            for (let x of Object.keys(windows)) {
+                let window = windows[x];
+                if (window['initZ'] > lastInitZ) {
+                    window['initZ'] -= 1;
+                } else if (window['initZ'] === lastInitZ) {
+                    window['initZ'] = maxInitZ;
+                }
+            }
+            context.commit('updateActiveWindow', windowName);
+            context.commit('updateOpenedWindows', windows);
         }
     },
     mutations: {
@@ -200,14 +225,17 @@ export default {
         updateOpenedWindows(state, windows) {
             console.log('updateOpenedWindows', windows);
             state.openedWindows = windows;
-            state.zIndexManager = new WindowZindexManager(windows);
+            // state.zIndexManager = new WindowZindexManager(windows);
         },
         updateActiveWindow(state, activeWindow) {
             console.log('updateActiveWindow', activeWindow);
             state.activeWindow = activeWindow;
         },
-        updateOrInsertWindow(state, {windowName, windowConfig}) {
-            console.log('updateOrInsertWindow', windowName, windowConfig);
+        updateWindow(state, {windowName, windowConfig}) {
+            state.openedWindows[windowName] = windowConfig;
+            state.openedWindows = Object.assign({}, state.openedWindows)
+        },
+        appendWindow(state, {windowName, windowConfig}) {
             state.openedWindows[windowName] = windowConfig;
             state.openedWindows = Object.assign({}, state.openedWindows)
         }

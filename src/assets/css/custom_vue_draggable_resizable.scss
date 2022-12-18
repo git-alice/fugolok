@@ -31,7 +31,8 @@
 //
 
 .dotted__box {
-  position: absolute; z-index: 5;
+  position: absolute;
+  z-index: 100;
   height: 100%;
   width: 100%;
   border: 1px dotted white;

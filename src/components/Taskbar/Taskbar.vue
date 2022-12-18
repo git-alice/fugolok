@@ -84,8 +84,12 @@ $bg: #149091;
   button {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+
+    img {
+      margin-right: 0.5rem;
+    }
 
     p {
       margin-left: 0.3rem;

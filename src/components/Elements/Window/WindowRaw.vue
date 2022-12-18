@@ -17,7 +17,7 @@
       :parent="true",
       :w="initialWidth",
       :h="initialHeight",
-      :z="initialZ",
+      :z="initZ",
       :min-width="300",
       :min-height="200",
       :drag-handle="'.drag-handle'",
@@ -296,6 +296,7 @@ export default {
       return this.initHeight ? this.initHeight : 200;
     },
     initializeZ() {
+      console.log('ZZZZ', this.initialZ)
       return this.initialZ ? this.initialZ : 4;
     },
   },
