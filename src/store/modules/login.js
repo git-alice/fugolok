@@ -23,6 +23,9 @@ export default {
         },
         setUserProfile(state, val) {
             state.userProfile = val
+        },
+        setUserToken(state, val) {
+            state.userToken = val
         }
     },
     actions: {
@@ -40,10 +43,13 @@ export default {
         async fetchUserProfile({ commit }, user) {
             if (user) {
                 // fetch user profile
-                const userProfile = await usersCollection.doc(user.uid).get()
-
+                // const userProfile = await usersCollection.doc(user.uid).get()
                 // set user profile in state
-                commit('setUserProfile', userProfile.data())
+                // commit('setUserProfile', userProfile.data())
+
+                // console.log('1', auth.currentUser)
+                commit('setUserProfile', auth.currentUser)
+                commit('setUserToken', auth.currentUser.getIdToken(true))
 
                 // change route to dashboard
                 if (router.currentRoute.path === '/login') {
@@ -59,5 +65,7 @@ export default {
         isLoggedIn: state => !!state.token,
         authStatus: state => state.status,
         user: state => state.user,
+        getUserProfile: state => state.userProfile,
+        getUserToken: state => state.userToken,
     }
 }

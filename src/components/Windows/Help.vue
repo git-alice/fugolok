@@ -9,23 +9,27 @@
             @click="startTour"
           )
       div
-      | Use <kbd>Ctrl</kbd> + [<kbd>Left</kbd>, <kbd>Right</kbd>, <kbd>Up</kbd>, <kbd>Down</kbd>] for split, fullscreen and minimize active window.
+        button(@click="getUserProfile") getProfile
+      div {{ prettify(token) }}
       hr
-      br
-      ul For MVP product:
-        li
-          ul [Backend]
-            li Fix upload a film [Itemize load, Create&save cover, Database model]
-            li Add getting a film
-              ul
-                li Getting films list
-                li Getting a single film with photos
-        li
-          ul [Frontend]
-            li Fix upload a film by a single photo
-            li Add show films and film
-            li Close all window -> Current time
-            li
+      div {{ prettify(profile) }}
+      // | Use <kbd>Ctrl</kbd> + [<kbd>Left</kbd>, <kbd>Right</kbd>, <kbd>Up</kbd>, <kbd>Down</kbd>] for split, fullscreen and minimize active window.
+      // hr
+      // br
+      // ul For MVP product:
+      //   li
+      //     ul [Backend]
+      //       li Fix upload a film [Itemize load, Create&save cover, Database model]
+      //       li Add getting a film
+      //         ul
+      //           li Getting films list
+      //           li Getting a single film with photos
+      //   li
+      //     ul [Frontend]
+      //       li Fix upload a film by a single photo
+      //       li Add show films and film
+      //       li Close all window -> Current time
+      //       li
 
 
 </template>
@@ -39,7 +43,8 @@ export default {
   name: 'Help',
   data() {
     return {
-
+        profile: {a: 1},
+        token: ''
     }
   },
   props: ['initOptions'],
@@ -54,6 +59,14 @@ export default {
   methods: {
     startTour() {
       this.$tours['myTour'].start()
+    },
+    getUserProfile() {
+      console.log(this.$store.getters)
+      this.profile = this.$store.getters.getUserProfile
+      this.token = this.$store.getters.getUserToken
+    },
+    prettify(v) {
+      return JSON.stringify(v, null, 2)
     }
   },
   mounted() {
